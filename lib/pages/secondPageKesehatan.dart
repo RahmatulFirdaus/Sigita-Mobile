@@ -9,8 +9,6 @@ import 'package:sigita_final_project/navigasi/navigasiBar.dart';
 import 'package:sigita_final_project/pages/view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-
 class PageProposal extends StatefulWidget {
   final String id;
   const PageProposal({super.key, required this.id});
@@ -55,7 +53,14 @@ class _PageProposalState extends State<PageProposal> {
       });
     });
   }
-  
+
+  @override
+  void dispose(){
+    super.dispose();
+    simpanKomentar.dispose();
+    simpanEmail.dispose();
+    simpanEmailDownload.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +133,7 @@ class _PageProposalState extends State<PageProposal> {
                                 child: Text('Harap Buka Ulang Aplikasi'));
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
-                            return Center(child: Text('${dataPesan.pesan}'));
+                            return Center(child: Text('Belum Ada Komentar'));
                           } else {
                             List<GetKomentar> dataKomentar =
                                 snapshot.data!; // Ambil data komentar
@@ -179,7 +184,7 @@ class _PageProposalState extends State<PageProposal> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 0, top: 20),
+            padding: const EdgeInsets.only(left: 0, top: 40),
             child: Text(
               "Informasi Lebih Lanjut",
               textAlign: TextAlign.center,
@@ -193,71 +198,80 @@ class _PageProposalState extends State<PageProposal> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text("Informasi Email"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: simpanEmailDownload,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(60),
-                            ),
-                            prefixIcon: const Icon(Icons.email_outlined),
-                            labelText: "Masukkan Email",
-                            hintText: "..@gmail.com",
-                            hintStyle:
-                                TextStyle(color: Colors.grey.withOpacity(0.5)),
-                          ),
-                        )
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text("Close"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("DOWNLOAD"),
-                        onPressed: () async {
-                          if (simpanEmailDownload.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: const Duration(seconds: 1),
-                                content: Text("Email Tidak Boleh Kosong"),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Informasi Email"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            controller: simpanEmailDownload,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(60),
                               ),
-                            );
-                          } else {
-                            launchUrl(Uri.parse(dataFile.pdf));
-                          }
-                        },
+                              prefixIcon: const Icon(Icons.email_outlined),
+                              labelText: "Masukkan Email",
+                              hintText: "..@gmail.com",
+                              hintStyle: TextStyle(
+                                  color: Colors.grey.withOpacity(0.5)),
+                            ),
+                          )
+                        ],
                       ),
-                    ],
-                  );
-                },
-              );
-            },
-            child: const Text(
-              "Download PDF",
-              style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text("Close"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text("DOWNLOAD"),
+                          onPressed: () async {
+                            if (simpanEmailDownload.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  duration: const Duration(seconds: 1),
+                                  content: Text("Email Tidak Boleh Kosong"),
+                                ),
+                              );
+                            } else {
+                              launchUrl(Uri.parse(dataFile.pdf));
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: const Text(
+                "Download PDF",
+                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+              ),
             ),
-          ),
-          SizedBox(
-            width: 20,),
-          ElevatedButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Viewpdfpage(data: dataFile.pdf,)));
-          }, child: Text("Lihat Pdf", style: TextStyle(color: Colors.black),))
+            SizedBox(
+              width: 20,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Viewpdfpage(
+                                data: dataFile.pdf,
+                              )));
+                },
+                child: Text(
+                  "Lihat Pdf",
+                  style: TextStyle(color: Colors.black),
+                ))
           ]),
           SizedBox(
             height: 20,
@@ -289,7 +303,7 @@ class _PageProposalState extends State<PageProposal> {
             padding: const EdgeInsets.only(left: 21, bottom: 5),
             child: Text(
               "Tinggalkan Komentar",
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.end,
               style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                       fontWeight: FontWeight.w600,
@@ -346,14 +360,17 @@ class _PageProposalState extends State<PageProposal> {
             child: Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  (simpanEmail.text.isEmpty || simpanKomentar.text.isEmpty)
-                      ? ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Email dan Komentar harus diisi"))
-                      )
-                      : await PostSigita.postSigita(
-                          dataRespon.id, simpanEmail.text, simpanKomentar.text
-                      );
-                      FocusScope.of(context).unfocus();
+                  if (simpanEmail.text.isEmpty || simpanKomentar.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Email dan Komentar harus diisi")),
+                    );
+                  } else {
+                    await PostSigita.postSigita(dataRespon.id, simpanEmail.text, simpanKomentar.text);
+                    FocusScope.of(context).unfocus();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Komentar Berhasil Dimasukkan")),
+                    );                    
+                  }
                 },
                 child: const Text(
                   "Simpan Komentar",
@@ -361,7 +378,7 @@ class _PageProposalState extends State<PageProposal> {
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );

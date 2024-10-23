@@ -70,9 +70,9 @@ class PostSigita {
     );
     var jsonData = jsonDecode(hasilResponse.body);
     return PostSigita(
-      id_postinganw: jsonData['id_postingan'],
-      email: jsonData['email'],
-      komentar: jsonData['komentar'],
+      id_postinganw: jsonData['id_postingan'].toString(),
+      email: jsonData['email'].toString(),
+      komentar: jsonData['komentar'].toString(),
     );
   }
 }
