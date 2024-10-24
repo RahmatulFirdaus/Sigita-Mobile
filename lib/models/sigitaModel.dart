@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class GetSigita {
-  String id, title, content, date, category, jumlah;
+  String id, title, content, date, category, jumlah, file;
 
   GetSigita({
     required this.id,
@@ -11,6 +11,7 @@ class GetSigita {
     required this.date,
     required this.category,
     required this.jumlah,
+    required this.file,
   });
 
   // Mengambil data tanpa validasi
@@ -23,6 +24,7 @@ class GetSigita {
       return GetSigita(
         id: user['id'].toString(),
         title: user['judul'],
+        file: user['file'],
         content: user['deskripsi'],
         date: user['tanggal'],
         category: user['kategori'],
@@ -39,6 +41,7 @@ class GetSigita {
     return GetSigita(
       id: user['id'].toString(),
       title: user['judul'],
+        file: user['file'],
       content: user['deskripsi'],
       date: user['tanggal'],
       category: user['kategori'],

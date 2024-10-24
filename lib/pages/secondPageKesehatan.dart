@@ -23,7 +23,7 @@ class _PageProposalState extends State<PageProposal> {
   TextEditingController simpanEmail = TextEditingController();
   TextEditingController simpanEmailDownload = TextEditingController();
   GetSigita dataRespon = GetSigita(
-      id: "", title: "", content: "", date: "", category: "", jumlah: "");
+      id: "", title: "", content: "",file: "", date: "", category: "", jumlah: "");
   GetFile dataFile = GetFile(pdf: "");
   List<GetKomentar> dataKomentar = [];
   GetPesan dataPesan = GetPesan(pesan: "");

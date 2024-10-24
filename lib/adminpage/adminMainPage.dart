@@ -10,16 +10,19 @@ class Adminmainpage extends StatefulWidget {
 
 class _AdminmainpageState extends State<Adminmainpage> {
   List<Adminmodel> adminList = [];
-  List<GetTotalPostingan> totalPostingan =[];
+  List<GetTotalPostingan> totalPostingan = [];
 
   @override
-  void initState() async{
-    adminList = Adminmodel.getAdminModel();
+  void initState() {
     super.initState();
+    fetchData();
+  }
+  Future<void> fetchData() async{
+    adminList = Adminmodel.getAdminModel();
 
     final totalPostinganInit = await GetTotalPostingan.getTotalPostingan();
     setState(() {
-      totalPostingan = totalPostingan;
+      totalPostingan = totalPostinganInit;
     });
   }
 
@@ -72,7 +75,7 @@ class _AdminmainpageState extends State<Adminmainpage> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            Text("$index", style: TextStyle(fontSize: 18),)
+                            Text("${totalPostingan[index].jumlah}", style: TextStyle(fontSize: 18),)
                           ]),
                     ),
                     Icon(
@@ -84,7 +87,7 @@ class _AdminmainpageState extends State<Adminmainpage> {
               );
             },
             separatorBuilder: (context, index) => SizedBox(height: 40),
-            itemCount: 3),
+            itemCount: totalPostingan.length),
       ),
     );
   }

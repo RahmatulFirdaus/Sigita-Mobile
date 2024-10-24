@@ -19,17 +19,20 @@ class Adminmodel {
 }
 
 class GetTotalPostingan{
-  String jumlah;
+  String jumlah, judul;
 
-  GetTotalPostingan({required this.jumlah});
+  GetTotalPostingan({required this.jumlah, required this.judul});
 
-  static Future<GetTotalPostingan> getTotalPostingan() async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getTotalPostingan");
+  static Future<List<GetTotalPostingan>> getTotalPostingan() async {
+    Uri url = Uri.parse("http://10.0.10.50:3000/api/getTotalPostinganDownloadKomentar");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
-    var user = jsonData["data"];
-    return GetTotalPostingan(
-      jumlah: user['jumlah'].toString()
-    );
+    var dataList = jsonData["data"] as List;
+    return dataList.map((user) {
+      return GetTotalPostingan(
+        judul: user['table_name'],
+        jumlah: user['total'].toString(),
+      );
+    }).toList();
   }
 }
