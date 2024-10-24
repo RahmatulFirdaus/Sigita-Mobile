@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sigita_final_project/adminpage/loginAdmin.dart';
 import 'package:sigita_final_project/pages/dashboard.dart';
-import 'package:sigita_final_project/models/sigitaModel.dart'; 
+import 'package:sigita_final_project/models/sigitaModel.dart';
 import 'package:sigita_final_project/pages/faqPage.dart';
 import 'package:sigita_final_project/pages/topik/etikaPage.dart';
 import 'package:sigita_final_project/pages/topik/peraturan.dart';
@@ -18,17 +19,16 @@ class Drawernavigasi extends StatefulWidget {
 class _DrawernavigasiState extends State<Drawernavigasi> {
   List<GetKategori> dataKategori = [];
   List pageList = [
-    { "halaman" : Kesehatanpage()},
-    { "halaman" : Masyarakatpage()},
-    { "halaman" : Etikapage()},
-    { "halaman" : Peraturanpage()},
+    {"halaman": Kesehatanpage()},
+    {"halaman": Masyarakatpage()},
+    {"halaman": Etikapage()},
+    {"halaman": Peraturanpage()},
   ];
 
   int _selectedIndex = 0;
 
-
   @override
-   void initState() {
+  void initState() {
     super.initState();
     GetKategori.getKategori().then((nilai) {
       setState(() {
@@ -36,6 +36,7 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
       });
     });
   }
+
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
@@ -55,7 +56,8 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
             DrawerHeader(
               padding: EdgeInsets.zero,
               decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage("images/rsj.jpg"), fit: BoxFit.cover),
+                image: DecorationImage(
+                    image: AssetImage("images/rsj.jpg"), fit: BoxFit.cover),
               ),
               child: Column(
                 children: [
@@ -82,7 +84,7 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.home_outlined),
               title: const Text(
                 "Dashboard",
                 style: TextStyle(fontSize: 16),
@@ -96,7 +98,7 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               },
             ),
             ExpansionTile(
-              leading: const Icon(Icons.pageview),
+              leading: const Icon(Icons.pageview_outlined),
               title: const Text("Topik"),
               children: dataKategori.map((kategori) {
                 return ListTile(
@@ -108,13 +110,17 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
                   ),
                   onTap: () {
                     _selectedIndex = dataKategori.indexOf(kategori);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => pageList[_selectedIndex]['halaman']));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                pageList[_selectedIndex]['halaman']));
                   },
                 );
               }).toList(),
             ),
             ListTile(
-              leading: const Icon(Icons.question_answer),
+              leading: const Icon(Icons.question_answer_outlined),
               title: Text(
                 "FAQ",
                 style: GoogleFonts.poppins(
@@ -122,7 +128,21 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
                 ),
               ),
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Faqpage()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Faqpage()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.admin_panel_settings_outlined),
+              title: Text(
+                "Admin Mode",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Loginadminpage()));
               },
             ),
           ],

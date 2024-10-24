@@ -32,30 +32,32 @@ class _PageProposalState extends State<PageProposal> {
   void initState() {
     super.initState();
     // Fetch data on initialization
-    GetSigita.connApiDetail(widget.id).then((value) {
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      // Mengambil semua data secara bertahap
+      final responData = await GetSigita.connApiDetail(widget.id);
+      final fileData = await GetFile.getFile(widget.id);
+      final komentarData = await GetKomentar.getKomentar(widget.id);
+      final pesanData = await GetPesan.getPesan(widget.id);
+
+      // Menggunakan setState hanya sekali untuk semua perubahan
       setState(() {
-        dataRespon = value;
+        dataRespon = responData;
+        dataFile = fileData;
+        dataKomentar = komentarData;
+        dataPesan = pesanData;
       });
-    });
-    GetFile.getFile(widget.id).then((value) {
-      setState(() {
-        dataFile = value;
-      });
-    });
-    GetKomentar.getKomentar(widget.id).then((value) {
-      setState(() {
-        dataKomentar = value;
-      });
-    });
-    GetPesan.getPesan(widget.id).then((value) {
-      setState(() {
-        dataPesan = value;
-      });
-    });
+    } catch (e) {
+      // Handle error
+      print('Error: $e');
+    }
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     simpanKomentar.dispose();
     simpanEmail.dispose();
@@ -365,11 +367,12 @@ class _PageProposalState extends State<PageProposal> {
                       SnackBar(content: Text("Email dan Komentar harus diisi")),
                     );
                   } else {
-                    await PostSigita.postSigita(dataRespon.id, simpanEmail.text, simpanKomentar.text);
+                    await PostSigita.postSigita(
+                        dataRespon.id, simpanEmail.text, simpanKomentar.text);
                     FocusScope.of(context).unfocus();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Komentar Berhasil Dimasukkan")),
-                    );                    
+                    );
                   }
                 },
                 child: const Text(
