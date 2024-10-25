@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sigita_final_project/models/sigitaModel.dart';
+import 'package:sigita_final_project/models/adminModel.dart';
 
 class Adminpostinganpage extends StatefulWidget {
   const Adminpostinganpage({super.key});
@@ -9,7 +9,7 @@ class Adminpostinganpage extends StatefulWidget {
 }
 
 class _AdminpostinganpageState extends State<Adminpostinganpage> {
-  List<GetSigita> getPostingan = [];
+  List<GetPostinganAdmin> getPostingan = [];
 
   @override
   void initState() {
@@ -18,7 +18,7 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
   }
 
   Future<void> fetchData() async {
-    final getPosting = await GetSigita.connApi();
+    final getPosting = await GetPostinganAdmin.getPostinganAdmin();
     setState(() {
       getPostingan = getPosting;
     });
@@ -28,25 +28,34 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: PaginatedDataTable(
-          header: Text("Tabel Postingan", textAlign: TextAlign.center,),
-          columns: [
-          DataColumn(label: Text("No")),
-          DataColumn(label: Text("Judul")),
-          DataColumn(label: Text("Kategori")),
-          DataColumn(label: Text("File")),
-          DataColumn(label: Text("Deskripsi")),
-          // DataColumn(label: Text("Jumlah Download")),
-          // DataColumn(label: Text("Komentar")),
-          DataColumn(label: Text("Aksi")),
-        ], source: MyDataSource(getPostingan: getPostingan), rowsPerPage: 10),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: PaginatedDataTable(
+                  header: Text("Tabel Postingan", textAlign: TextAlign.center,),
+                  columns: [
+                  DataColumn(label: Text("No")),
+                  DataColumn(label: Text("Judul")),
+                  DataColumn(label: Text("Kategori")),
+                  DataColumn(label: Text("File")),
+                  DataColumn(label: Text("Deskripsi")),
+                  DataColumn(label: Text("Jumlah Download")),
+                  DataColumn(label: Text("Jumlah Komentar")),
+                  DataColumn(label: Text("Aksi")),
+                ], source: MyDataSource(getPostingan: getPostingan), rowsPerPage: 10),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class MyDataSource extends DataTableSource {
-  final List<GetSigita> getPostingan;
+  final List<GetPostinganAdmin> getPostingan;
 
   MyDataSource({required this.getPostingan});
 
@@ -62,13 +71,21 @@ class MyDataSource extends DataTableSource {
       DataCell(Text(postingan.category)),
       DataCell(Text(postingan.file)),
       DataCell(Text(postingan.content)),
+      DataCell(Text(postingan.jumlah_download)),
+      DataCell(Text(postingan.jumlah_komentar)),
       DataCell(
-        ElevatedButton(
-          onPressed: () {
-            // Implementasikan aksi hapus
-          },
-          child: Text("Hapus"),
-        ),
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.edit),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.delete),
+            ),
+          ],
+        )
       ),
     ]);
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sigita_final_project/adminpage/getXController.dart';
 import 'package:sigita_final_project/pages/openingSplashScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -24,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       ),
       title: "Sigita",
       // theme: ThemeData.light(),
-      home: OpeningSplashScreen()
+      home: Getxcontrollerpage()
     );
   }
 }

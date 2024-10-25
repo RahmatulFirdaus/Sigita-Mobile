@@ -41,7 +41,7 @@ class GetSigita {
     return GetSigita(
       id: user['id'].toString(),
       title: user['judul'],
-        file: user['file'],
+      file: user['file'],
       content: user['deskripsi'],
       date: user['tanggal'],
       category: user['kategori'],
@@ -49,6 +49,8 @@ class GetSigita {
     );
   }
 }
+
+
 
 class PostSigita {
   String id_postinganw;

@@ -252,7 +252,7 @@ class _KesehatanpageState extends State<Kesehatanpage> {
                                             ),
                                           ),
                                           Text(
-                                            "Jumlah : ${data.jumlah}",
+                                            " Jumlah Komentar : ${data.jumlah}",
                                             style: GoogleFonts.poppins(
                                               textStyle:
                                                   const TextStyle(fontSize: 16),
