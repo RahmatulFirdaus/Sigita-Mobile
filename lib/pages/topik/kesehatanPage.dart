@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sigita_final_project/drawerNav/drawerNavigasi.dart';
 import 'package:sigita_final_project/models/sigitaModel.dart';
-import 'package:sigita_final_project/pages/dashboard.dart';
 import 'package:sigita_final_project/pages/secondPageKesehatan.dart';
 import 'package:sigita_final_project/navigasi/navigasiBar.dart';
 
@@ -63,10 +62,10 @@ class _KesehatanpageState extends State<Kesehatanpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Navigasibar(),
-      drawer: Drawernavigasi(),
+      appBar: const Navigasibar(),
+      drawer: const Drawernavigasi(),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Colors.white,
@@ -296,7 +295,7 @@ class _KesehatanpageState extends State<Kesehatanpage> {
                         width: constraints.maxWidth * 1,
                         height: constraints.maxHeight,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                               colors: [
                                 Color.fromRGBO(63, 236, 255, 1),
                                 Colors.purple, // Warna akhir

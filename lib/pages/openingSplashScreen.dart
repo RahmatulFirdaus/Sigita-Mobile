@@ -15,10 +15,10 @@ class _OpeningSplashScreenState extends State<OpeningSplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 5), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) =>
-              DashboardPage())); // Ganti dengan halaman utama Anda
+              const DashboardPage())); // Ganti dengan halaman utama Anda
     });
   }
 
@@ -26,7 +26,7 @@ class _OpeningSplashScreenState extends State<OpeningSplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
             Colors.white,
@@ -40,12 +40,12 @@ class _OpeningSplashScreenState extends State<OpeningSplashScreen> {
           child: AnimatedTextKit(animatedTexts: [
         TypewriterAnimatedText(
           'Welcome to Sigita',
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 30,
-            color: const Color.fromARGB(255, 7, 7, 7),
+            color: Color.fromARGB(255, 7, 7, 7),
             fontWeight: FontWeight.bold,
           ),
-          speed: Duration(milliseconds: 200),
+          speed: const Duration(milliseconds: 200),
         ),
       ])),
     ));

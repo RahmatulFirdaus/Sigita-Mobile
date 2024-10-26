@@ -70,7 +70,7 @@ class GetPostinganAdmin {
         title: user['judul'],
         file: user['file'],
         content: user['deskripsi'],
-        date: user['tanggal'],
+        date: user['tanggal'].toString(),
         category: user['kategori'],
         jumlah_download: user['jumlah_download'].toString(),
         jumlah_komentar: user['jumlah_komentar'].toString(),
@@ -104,31 +104,40 @@ class GetKategoriAdmin {
 }
 
 class UpdatePostinganAdmin {
-  String judul, id_kategori, tanggal, deskripsi, file;
+  String judul, deskripsi, file;
 
   UpdatePostinganAdmin({
     required this.judul,
-    required this.id_kategori,
-    required this.tanggal,
     required this.deskripsi,
     required this.file,
   });
 
-  Future<UpdatePostinganAdmin> updatePostinganAdmin(String id) async {
-    Uri url = Uri.parse("http://192.168.1.4:3000/api/getUpdatePostingan/$id");
-    var hasilResponse = await http.put(url, body: {
-      "id_kategori": id_kategori,
+  static Future<UpdatePostinganAdmin> updatePostinganAdmin(String id, String judul, String file, String deskripsi) async {
+    Uri url = Uri.parse("http://192.168.1.4:3000/api/updatePostingan/$id");
+    var hasilResponse = await http.patch(url, body: {
       "judul": judul,
       "file": file,
       "deskripsi": deskripsi,
-      "tanggal": tanggal
     });
     var jsonData = jsonDecode(hasilResponse.body);
     return UpdatePostinganAdmin(
-        judul: jsonData['judul'],
-        id_kategori: jsonData['id_kategori'].toString(),
-        tanggal: jsonData['tanggal'].toString(),
-        deskripsi: jsonData['deskripsi'],
-        file: jsonData['file']);
+        judul: jsonData['judul'].toString(),
+        file: jsonData['file'].toString(),
+        deskripsi: jsonData['deskripsi'].toString());
+  }
+}
+
+class DeletePostinganAdmin {
+  String id;
+
+  DeletePostinganAdmin({
+    required this.id,
+  });
+
+  static Future<DeletePostinganAdmin> deletePostinganAdmin(String id) async {
+    Uri url = Uri.parse("http://192.168.1.4:3000/api/deletePostingan/$id");
+    var hasilResponse = await http.delete(url);
+    var jsonData = jsonDecode(hasilResponse.body);
+    return DeletePostinganAdmin(id: jsonData['id'].toString());
   }
 }

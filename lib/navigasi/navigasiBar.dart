@@ -13,7 +13,7 @@ class Navigasibar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       actions: [
         IconButton(
-          icon: Icon(Icons.refresh_outlined, color: Colors.white,),
+          icon: const Icon(Icons.refresh_outlined, color: Colors.white,),
           onPressed: (){
             restartApp(context);
           },
@@ -29,13 +29,13 @@ class Navigasibar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(width: 90),
+          const SizedBox(width: 90),
           Image.asset(
             'images/logo.png',
             width: 30,
           ),
           const SizedBox(width: 10),
-          Text(
+          const Text(
         "SIGITA",
         style: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 30, ),
       ),

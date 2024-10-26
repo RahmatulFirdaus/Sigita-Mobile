@@ -33,7 +33,7 @@ class _AdminmainpageState extends State<Adminmainpage> {
       appBar: AppBar(
         toolbarHeight: 80,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Admin Management",
           style: TextStyle(color: Colors.white),
         ),
@@ -43,13 +43,13 @@ class _AdminmainpageState extends State<Adminmainpage> {
         children: [
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(top: 40),
+              padding: const EdgeInsets.only(top: 40),
               child: ListView.separated(
                 clipBehavior: Clip.none,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.symmetric(
                         horizontal: 20,
                       ),
                       width: double.infinity,
@@ -62,7 +62,7 @@ class _AdminmainpageState extends State<Adminmainpage> {
                               color: Colors.black.withOpacity(0.3),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ]),
                       child: Row(
@@ -73,14 +73,14 @@ class _AdminmainpageState extends State<Adminmainpage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "${adminList[index].judul}",
-                                    style: TextStyle(
+                                    adminList[index].judul,
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20
                                     ),
                                   ),
-                                  SizedBox(height: 10),
-                                  Text("${totalPostingan[index].jumlah}", style: TextStyle(fontSize: 18),)
+                                  const SizedBox(height: 10),
+                                  Text(totalPostingan[index].jumlah, style: const TextStyle(fontSize: 18),)
                                 ]),
                           ),
                           Icon(
@@ -91,13 +91,13 @@ class _AdminmainpageState extends State<Adminmainpage> {
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) => SizedBox(height: 40),
+                  separatorBuilder: (context, index) => const SizedBox(height: 40),
                   itemCount: totalPostingan.length),
             ),
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           Container(
-            child: Linechart(),
+            child: const Linechart(),
           )
         ],
       ),

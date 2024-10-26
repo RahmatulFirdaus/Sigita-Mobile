@@ -35,8 +35,8 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: PaginatedDataTable(
-                  header: Text("Tabel Postingan", textAlign: TextAlign.center,),
-                  columns: [
+                  header: const Text("Tabel Postingan", textAlign: TextAlign.center,),
+                  columns: const [
                     DataColumn(label: Text("No")),
                     DataColumn(label: Text("Judul")),
                     DataColumn(label: Text("Kategori")),
@@ -90,11 +90,11 @@ class MyDataSource extends DataTableSource {
                   ),
                 );
               },
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
             ),
           ],
         ),

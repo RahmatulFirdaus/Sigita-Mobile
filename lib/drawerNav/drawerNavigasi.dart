@@ -19,10 +19,10 @@ class Drawernavigasi extends StatefulWidget {
 class _DrawernavigasiState extends State<Drawernavigasi> {
   List<GetKategori> dataKategori = [];
   List pageList = [
-    {"halaman": Kesehatanpage()},
-    {"halaman": Masyarakatpage()},
-    {"halaman": Etikapage()},
-    {"halaman": Peraturanpage()},
+    {"halaman": const Kesehatanpage()},
+    {"halaman": const Masyarakatpage()},
+    {"halaman": const Etikapage()},
+    {"halaman": const Peraturanpage()},
   ];
 
   int _selectedIndex = 0;
@@ -37,10 +37,11 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Colors.white,
@@ -92,7 +93,7 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               onTap: () {
                 Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) {
-                    return DashboardPage();
+                    return const DashboardPage();
                   },
                 ));
               },
@@ -129,7 +130,7 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               ),
               onTap: () {
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Faqpage()));
+                    MaterialPageRoute(builder: (context) => const Faqpage()));
               },
             ),
             ListTile(
@@ -142,7 +143,7 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Loginadminpage()));
+                    MaterialPageRoute(builder: (context) => const Loginadminpage()));
               },
             ),
           ],

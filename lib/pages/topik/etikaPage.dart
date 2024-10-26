@@ -8,10 +8,10 @@ class Etikapage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: Navigasibar(),
-        drawer: Drawernavigasi(),
+        appBar: const Navigasibar(),
+        drawer: const Drawernavigasi(),
         body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Colors.white,
@@ -21,7 +21,7 @@ class Etikapage extends StatelessWidget {
                 end: Alignment.bottomCenter, // Titik akhir gradien
               ),
             ),
-            child: Center(
+            child: const Center(
                 child: Text(
               "Postingan Tidak Ada",
               style: TextStyle(

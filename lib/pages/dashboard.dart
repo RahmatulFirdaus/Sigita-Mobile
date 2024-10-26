@@ -9,11 +9,11 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: Navigasibar(),
-        drawer: Drawernavigasi(),
+        appBar: const Navigasibar(),
+        drawer: const Drawernavigasi(),
         body: SingleChildScrollView(
           child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     Colors.white,
@@ -26,8 +26,8 @@ class DashboardPage extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 40, 10, 30),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 40, 10, 30),
                       child: Text(
                         "Selamat Datang di SIGITA",
                         textAlign: TextAlign.center,
@@ -37,7 +37,7 @@ class DashboardPage extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     buildSection(
@@ -58,10 +58,10 @@ class DashboardPage extends StatelessWidget {
                       description:
                           "Dapatkan bimbingan dari para ahli dan praktisi keperawatan yang berpengalaman. Tim SIGITA siap membantu menjawab pertanyaan dan memberikan tips praktis tingkatkan pengetahuan dan keterampilan Anda untuk menjadi perawat yang kompeten dan percaya diri..",
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
-                    Text(
+                    const Text(
                       "Lihat Informasi Lebih Lanjut",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -69,7 +69,7 @@ class DashboardPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 20),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Padding(
@@ -79,7 +79,7 @@ class DashboardPage extends StatelessWidget {
                             launchUrl(Uri.parse(
                                 "https://www.youtube.com/@rsjsambanglihum4612"));
                           },
-                          child: Text(
+                          child: const Text(
                             "Cek Youtube Kami",
                             style: TextStyle(color: Colors.black),
                           )),
@@ -101,8 +101,8 @@ class DashboardPage extends StatelessWidget {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  CircleAvatar(backgroundColor: const Color.fromARGB(255, 162, 213, 255), radius: 27),
-                  CircleAvatar(
+                  const CircleAvatar(backgroundColor: Color.fromARGB(255, 162, 213, 255), radius: 27),
+                  const CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 21),
                   CircleAvatar(
@@ -118,14 +118,14 @@ class DashboardPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(title,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 22)),
-                      SizedBox(height: 13),
+                      const SizedBox(height: 13),
                       Padding(
                         padding: const EdgeInsets.only(left: 2),
-                        child: Text(description, style: TextStyle(color: Colors.black),textAlign: TextAlign.justify,),
+                        child: Text(description, style: const TextStyle(color: Colors.black),textAlign: TextAlign.justify,),
                       ),
                     ],
                   ),

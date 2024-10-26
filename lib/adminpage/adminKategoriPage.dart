@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:sigita_final_project/models/adminModel.dart';
 
 class Adminkategoripage extends StatefulWidget {
@@ -35,11 +34,11 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: PaginatedDataTable(
-                    header: Text(
+                    header: const Text(
                       "Tabel Kategori",
                       textAlign: TextAlign.center,
                     ),
-                    columns: [
+                    columns: const [
                       DataColumn(label: Text("No")),
                       DataColumn(label: Text("Kategori")),
                       DataColumn(label: Text("Jumlah Postingan")),
@@ -73,11 +72,11 @@ class MyDataSource extends DataTableSource {
         children: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
           ),
         ],
       )),

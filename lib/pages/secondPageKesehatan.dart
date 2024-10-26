@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sigita_final_project/models/sigitaModel.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
 import 'package:sigita_final_project/navigasi/navigasiBar.dart';
 import 'package:sigita_final_project/pages/view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,12 +14,12 @@ class PageProposal extends StatefulWidget {
 }
 
 class _PageProposalState extends State<PageProposal> {
-  bool _isRequestingPermission = false;
+  final bool _isRequestingPermission = false;
   TextEditingController simpanKomentar = TextEditingController();
   TextEditingController simpanEmail = TextEditingController();
   TextEditingController simpanEmailDownload = TextEditingController();
   GetSigita dataRespon = GetSigita(
-      id: "", title: "", content: "",file: "", date: "", category: "", jumlah: "");
+      id: "", title: "", content: "",file: "", date: "", category: "", jumlah: "", id_kategori: "");
   GetFile dataFile = GetFile(pdf: "");
   List<GetKomentar> dataKomentar = [];
   GetPesan dataPesan = GetPesan(pesan: "");
@@ -66,7 +62,7 @@ class _PageProposalState extends State<PageProposal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: Navigasibar(), body: MainIndex());
+    return Scaffold(appBar: const Navigasibar(), body: MainIndex());
   }
 
   SingleChildScrollView MainIndex() {
@@ -75,7 +71,7 @@ class _PageProposalState extends State<PageProposal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Colors.white,
@@ -91,14 +87,14 @@ class _PageProposalState extends State<PageProposal> {
                     "https://news.ciptamedika.com/wp-content/uploads/2019/02/alatkesehatan.png"),
                 Title(),
                 Space(),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Description(),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
-                Text(
+                const Text(
                   "Komentar",
                   style: TextStyle(
                       fontSize: 24,
@@ -108,7 +104,7 @@ class _PageProposalState extends State<PageProposal> {
                 Stack(alignment: Alignment.topCenter, children: [
                   Positioned(
                     child: Container(
-                      margin: EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 10),
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -116,7 +112,7 @@ class _PageProposalState extends State<PageProposal> {
                               spreadRadius: 5,
                               blurRadius: 7,
                               offset:
-                                  Offset(0, 3), // changes position of shadow
+                                  const Offset(0, 3), // changes position of shadow
                             ),
                           ],
                           borderRadius: BorderRadius.circular(50),
@@ -129,13 +125,13 @@ class _PageProposalState extends State<PageProposal> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(child: CircularProgressIndicator());
                           } else if (snapshot.hasError) {
-                            return Center(
+                            return const Center(
                                 child: Text('Harap Buka Ulang Aplikasi'));
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
-                            return Center(child: Text('Belum Ada Komentar'));
+                            return const Center(child: Text('Belum Ada Komentar'));
                           } else {
                             List<GetKomentar> dataKomentar =
                                 snapshot.data!; // Ambil data komentar
@@ -151,16 +147,16 @@ class _PageProposalState extends State<PageProposal> {
                                       bottom: 30, top: 20, left: 0, right: 20),
                                   child: ListTile(
                                     title: Text(
-                                      "${data.email}",
-                                      style: TextStyle(
+                                      data.email,
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 19),
                                     ),
                                     subtitle: Text(
-                                      "${data.komentar}",
+                                      data.komentar,
                                       textAlign: TextAlign.justify,
                                     ),
-                                    leading: Icon(Icons.person_2),
+                                    leading: const Icon(Icons.person_2),
                                   ),
                                 );
                               },
@@ -197,7 +193,7 @@ class _PageProposalState extends State<PageProposal> {
                       color: Colors.black)),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -238,8 +234,8 @@ class _PageProposalState extends State<PageProposal> {
                           onPressed: () async {
                             if (simpanEmailDownload.text.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  duration: const Duration(seconds: 1),
+                                const SnackBar(
+                                  duration: Duration(seconds: 1),
                                   content: Text("Email Tidak Boleh Kosong"),
                                 ),
                               );
@@ -258,7 +254,7 @@ class _PageProposalState extends State<PageProposal> {
                 style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             ElevatedButton(
@@ -270,12 +266,12 @@ class _PageProposalState extends State<PageProposal> {
                                 data: dataFile.pdf,
                               )));
                 },
-                child: Text(
+                child: const Text(
                   "Lihat Pdf",
                   style: TextStyle(color: Colors.black),
                 ))
           ]),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],
@@ -285,15 +281,15 @@ class _PageProposalState extends State<PageProposal> {
 
   Container Comment() {
     return Container(
-      margin: EdgeInsets.fromLTRB(6, 350, 6, 0),
-      padding: EdgeInsets.fromLTRB(15, 35, 15, 15),
+      margin: const EdgeInsets.fromLTRB(6, 350, 6, 0),
+      padding: const EdgeInsets.fromLTRB(15, 35, 15, 15),
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.3),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
           borderRadius: BorderRadius.circular(50),
@@ -319,11 +315,11 @@ class _PageProposalState extends State<PageProposal> {
               controller: simpanEmail,
               decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(color: Colors.black),
                     borderRadius: BorderRadius.circular(60),
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.circular(60)),
                   prefixIcon: const Icon(
                     Icons.email_outlined,
@@ -341,11 +337,11 @@ class _PageProposalState extends State<PageProposal> {
               controller: simpanKomentar,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
+                  borderSide: const BorderSide(color: Colors.black),
                   borderRadius: BorderRadius.circular(60),
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(color: Colors.black),
                     borderRadius: BorderRadius.circular(60)),
                 prefixIcon: const Icon(
                   Icons.pending,
@@ -364,14 +360,14 @@ class _PageProposalState extends State<PageProposal> {
                 onPressed: () async {
                   if (simpanEmail.text.isEmpty || simpanKomentar.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Email dan Komentar harus diisi")),
+                      const SnackBar(content: Text("Email dan Komentar harus diisi")),
                     );
                   } else {
                     await PostSigita.postSigita(
                         dataRespon.id, simpanEmail.text, simpanKomentar.text);
                     FocusScope.of(context).unfocus();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Komentar Berhasil Dimasukkan")),
+                      const SnackBar(content: Text("Komentar Berhasil Dimasukkan")),
                     );
                   }
                 },

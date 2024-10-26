@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sigita_final_project/adminpage/adminMainPage.dart';
 import 'package:sigita_final_project/adminpage/getXController.dart';
 
 class Loginadminpage extends StatefulWidget {
@@ -25,7 +24,7 @@ class _LoginadminpageState extends State<Loginadminpage> {
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
@@ -36,16 +35,16 @@ class _LoginadminpageState extends State<Loginadminpage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.arrow_back_ios_new),
+                  icon: const Icon(Icons.arrow_back_ios_new),
                 ),
               )
             ]),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: Row(
+                margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                child: const Row(
                   children: [
                     Text(
                       "Login Admin",
@@ -58,60 +57,60 @@ class _LoginadminpageState extends State<Loginadminpage> {
                     ),
                     Icon(
                       Icons.warning_sharp,
-                      color: const Color.fromARGB(255, 255, 0, 0),
+                      color: Color.fromARGB(255, 255, 0, 0),
                       size: 50,
                     )
                   ],
                 )),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 22),
+              padding: const EdgeInsets.only(left: 22),
               child: Text("Username",
                   style: TextStyle(
                       fontSize: 15, color: Colors.black.withOpacity(0.5))),
             ),
             Container(
-                margin: EdgeInsets.fromLTRB(22, 0, 23, 0),
+                margin: const EdgeInsets.fromLTRB(22, 0, 23, 0),
                 child: TextField(
                   controller: usernameController,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
+                    contentPadding: const EdgeInsets.all(10),
                     hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.person_outline,
                     ),
                   ),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 22),
+              padding: const EdgeInsets.only(left: 22),
               child: Text("Password",
                   style: TextStyle(
                       fontSize: 15, color: Colors.black.withOpacity(0.5))),
             ),
             Container(
-                padding: EdgeInsets.fromLTRB(22, 0, 23, 0),
+                padding: const EdgeInsets.fromLTRB(22, 0, 23, 0),
                 child: TextFormField(
                   controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
+                    contentPadding: const EdgeInsets.all(10),
                     hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.lock_outline,
                     ),
                   ),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 45,
             ),
             Container(
               height: 70,
-              margin: EdgeInsets.symmetric(horizontal: 22),
+              margin: const EdgeInsets.symmetric(horizontal: 22),
               child: ElevatedButton(
                 onPressed: () {
                   //validasi saat username dan password kosong
@@ -162,7 +161,7 @@ class _LoginadminpageState extends State<Loginadminpage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Getxcontrollerpage()));
+                            builder: (context) => const Getxcontrollerpage()));
                   } else {
                     Fluttertoast.showToast(
                         msg: "Invalid username or password",
@@ -179,12 +178,12 @@ class _LoginadminpageState extends State<Loginadminpage> {
                   }
                 },
                 style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30))),
-                  backgroundColor: MaterialStatePropertyAll(
+                  backgroundColor: WidgetStatePropertyAll(
                       const Color.fromARGB(255, 0, 0, 0).withOpacity(0.8)),
                 ),
-                child: Text(
+                child: const Text(
                   "Login",
                   style: TextStyle(color: Colors.white, fontSize: 17),
                 ),

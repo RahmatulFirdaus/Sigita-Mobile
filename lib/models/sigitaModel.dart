@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class GetSigita {
-  String id, title, content, date, category, jumlah, file;
+  String id, title, content, date, category, jumlah, file, id_kategori;
 
   GetSigita({
     required this.id,
@@ -12,6 +12,7 @@ class GetSigita {
     required this.category,
     required this.jumlah,
     required this.file,
+    required this.id_kategori,
   });
 
   // Mengambil data tanpa validasi
@@ -23,6 +24,7 @@ class GetSigita {
     return dataList.map((user) {
       return GetSigita(
         id: user['id'].toString(),
+        id_kategori: user['id_kategori'].toString(),
         title: user['judul'],
         file: user['file'],
         content: user['deskripsi'],
@@ -40,10 +42,11 @@ class GetSigita {
     var user = jsonData["data"][0];
     return GetSigita(
       id: user['id'].toString(),
+      id_kategori: user['id_kategori'].toString(),
       title: user['judul'],
       file: user['file'],
       content: user['deskripsi'],
-      date: user['tanggal'],
+      date: user['tanggal'].toString(),
       category: user['kategori'],
       jumlah: user['jmlh'].toString(),
     );
@@ -105,12 +108,12 @@ class PermissionFile {
   });
 
   static Future<PermissionFile> postDownload(
-      String id_postingan, String email) async {
+      String idPostingan, String email) async {
     Uri url = Uri.parse("http://192.168.1.4:3000/Api/downloadModul");
     var hasilResponse = await http.post(
       url,
       body: {
-        "id_postingan": id_postingan,
+        "id_postingan": idPostingan,
         "email": email,
       },
     );

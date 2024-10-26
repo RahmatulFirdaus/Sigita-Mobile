@@ -14,7 +14,7 @@ class _ViewpdfpageState extends State<Viewpdfpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Back"),
+        title: const Text("Back"),
       ),
       body: Container(
           child: SfPdfViewer.network(
