@@ -25,15 +25,14 @@ class _MyAppState extends State<MyApp> {
       ),
       title: "Sigita",
       // theme: ThemeData.light(),
-      home: Getxcontrollerpage()
+      home: OpeningSplashScreen()
     );
   }
 }
 void restartApp(BuildContext context) {
-    // Navigasi untuk mengganti semua rute dengan halaman baru (me-restart aplikasi)
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => MyApp()),
-      (route) => false, // Menghapus semua rute
+      (route) => false,
     );
   }

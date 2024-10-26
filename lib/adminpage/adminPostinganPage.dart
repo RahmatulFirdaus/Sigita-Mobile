@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sigita_final_project/adminpage/edit_page/postingan.dart';
 import 'package:sigita_final_project/models/adminModel.dart';
 
 class Adminpostinganpage extends StatefulWidget {
@@ -36,15 +37,18 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
                 child: PaginatedDataTable(
                   header: Text("Tabel Postingan", textAlign: TextAlign.center,),
                   columns: [
-                  DataColumn(label: Text("No")),
-                  DataColumn(label: Text("Judul")),
-                  DataColumn(label: Text("Kategori")),
-                  DataColumn(label: Text("File")),
-                  DataColumn(label: Text("Deskripsi")),
-                  DataColumn(label: Text("Jumlah Download")),
-                  DataColumn(label: Text("Jumlah Komentar")),
-                  DataColumn(label: Text("Aksi")),
-                ], source: MyDataSource(getPostingan: getPostingan), rowsPerPage: 10),
+                    DataColumn(label: Text("No")),
+                    DataColumn(label: Text("Judul")),
+                    DataColumn(label: Text("Kategori")),
+                    DataColumn(label: Text("File")),
+                    DataColumn(label: Text("Deskripsi")),
+                    DataColumn(label: Text("Jumlah Download")),
+                    DataColumn(label: Text("Jumlah Komentar")),
+                    DataColumn(label: Text("Aksi")),
+                  ],
+                  source: MyDataSource(getPostingan: getPostingan, context: context), // Pass context here
+                  rowsPerPage: 10,
+                ),
               ),
             ),
           ],
@@ -56,8 +60,9 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
 
 class MyDataSource extends DataTableSource {
   final List<GetPostinganAdmin> getPostingan;
+  final BuildContext context; // Add context as a member variable
 
-  MyDataSource({required this.getPostingan});
+  MyDataSource({required this.getPostingan, required this.context}); // Update constructor
 
   @override
   DataRow? getRow(int index) {
@@ -77,7 +82,14 @@ class MyDataSource extends DataTableSource {
         Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdatePostingan(id: postingan.id),
+                  ),
+                );
+              },
               icon: Icon(Icons.edit),
             ),
             IconButton(
@@ -85,7 +97,7 @@ class MyDataSource extends DataTableSource {
               icon: Icon(Icons.delete),
             ),
           ],
-        )
+        ),
       ),
     ]);
   }

@@ -8,7 +8,7 @@ class Adminmodel {
 
   Adminmodel({required this.judul, required this.ikon});
 
-  static List<Adminmodel> getAdminModel(){
+  static List<Adminmodel> getAdminModel() {
     List<Adminmodel> adminList = [];
 
     adminList.add(Adminmodel(judul: "Jumlah Postingan", ikon: Icons.book));
@@ -18,13 +18,14 @@ class Adminmodel {
   }
 }
 
-class GetTotalPostingan{
+class GetTotalPostingan {
   String jumlah, judul;
 
   GetTotalPostingan({required this.jumlah, required this.judul});
 
   static Future<List<GetTotalPostingan>> getTotalPostingan() async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getTotalPostinganDownloadKomentar");
+    Uri url = Uri.parse(
+        "http://192.168.1.4:3000/api/getTotalPostinganDownloadKomentar");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -38,7 +39,14 @@ class GetTotalPostingan{
 }
 
 class GetPostinganAdmin {
-  String id, title, content, date, category, jumlah_download, file, jumlah_komentar;
+  String id,
+      title,
+      content,
+      date,
+      category,
+      jumlah_download,
+      file,
+      jumlah_komentar;
 
   GetPostinganAdmin({
     required this.id,
@@ -52,7 +60,7 @@ class GetPostinganAdmin {
   });
 
   static Future<List<GetPostinganAdmin>> getPostinganAdmin() async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getPostinganAdmin");
+    Uri url = Uri.parse("http://192.168.1.4:3000/api/getPostinganAdmin");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -71,7 +79,7 @@ class GetPostinganAdmin {
   }
 }
 
-class GetKategoriAdmin{
+class GetKategoriAdmin {
   String id, kategori, jumlah_postingan;
 
   GetKategoriAdmin({
@@ -81,7 +89,7 @@ class GetKategoriAdmin{
   });
 
   static Future<List<GetKategoriAdmin>> getKategoriAdmin() async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getKategoriAdmin");
+    Uri url = Uri.parse("http://192.168.1.4:3000/api/getKategoriAdmin");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -92,5 +100,35 @@ class GetKategoriAdmin{
         jumlah_postingan: user['total_postingan'].toString(),
       );
     }).toList();
+  }
+}
+
+class UpdatePostinganAdmin {
+  String judul, id_kategori, tanggal, deskripsi, file;
+
+  UpdatePostinganAdmin({
+    required this.judul,
+    required this.id_kategori,
+    required this.tanggal,
+    required this.deskripsi,
+    required this.file,
+  });
+
+  Future<UpdatePostinganAdmin> updatePostinganAdmin(String id) async {
+    Uri url = Uri.parse("http://192.168.1.4:3000/api/getUpdatePostingan/$id");
+    var hasilResponse = await http.put(url, body: {
+      "id_kategori": id_kategori,
+      "judul": judul,
+      "file": file,
+      "deskripsi": deskripsi,
+      "tanggal": tanggal
+    });
+    var jsonData = jsonDecode(hasilResponse.body);
+    return UpdatePostinganAdmin(
+        judul: jsonData['judul'],
+        id_kategori: jsonData['id_kategori'].toString(),
+        tanggal: jsonData['tanggal'].toString(),
+        deskripsi: jsonData['deskripsi'],
+        file: jsonData['file']);
   }
 }
