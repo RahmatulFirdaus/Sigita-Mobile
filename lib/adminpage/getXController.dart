@@ -24,10 +24,10 @@ class _GetxcontrollerpageState extends State<Getxcontrollerpage> {
           onDestinationSelected: (index) {
             _navController.updateIndex(index);
           },
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.home_rounded), label: "Home"),
-            NavigationDestination(icon: Icon(Icons.poll_sharp), label: "Postingan"),
-            NavigationDestination(icon: Icon(Icons.polyline), label: "Kategori"),
+          destinations: [
+            const NavigationDestination(icon: Icon(Icons.home_rounded), label: "Home"),
+            const NavigationDestination(icon: Icon(Icons.poll_sharp), label: "Postingan"),
+            const NavigationDestination(icon: Icon(Icons.polyline), label: "Kategori"),
           ],
         )));
   }

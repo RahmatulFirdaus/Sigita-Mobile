@@ -178,9 +178,9 @@ class _LoginadminpageState extends State<Loginadminpage> {
                   }
                 },
                 style: ButtonStyle(
-                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30))),
-                  backgroundColor: WidgetStatePropertyAll(
+                  backgroundColor: MaterialStatePropertyAll(
                       const Color.fromARGB(255, 0, 0, 0).withOpacity(0.8)),
                 ),
                 child: const Text(

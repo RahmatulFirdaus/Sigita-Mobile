@@ -14,7 +14,6 @@ class PageProposal extends StatefulWidget {
 }
 
 class _PageProposalState extends State<PageProposal> {
-  final bool _isRequestingPermission = false;
   TextEditingController simpanKomentar = TextEditingController();
   TextEditingController simpanEmail = TextEditingController();
   TextEditingController simpanEmailDownload = TextEditingController();
@@ -147,13 +146,13 @@ class _PageProposalState extends State<PageProposal> {
                                       bottom: 30, top: 20, left: 0, right: 20),
                                   child: ListTile(
                                     title: Text(
-                                      data.email,
+                                      "${data.email}",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 19),
                                     ),
                                     subtitle: Text(
-                                      data.komentar,
+                                      "${data.komentar}",
                                       textAlign: TextAlign.justify,
                                     ),
                                     leading: const Icon(Icons.person_2),

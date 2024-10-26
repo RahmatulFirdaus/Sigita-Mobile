@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sigita_final_project/models/adminModel.dart';
 import 'package:sigita_final_project/models/sigitaModel.dart';
 
 class UpdatePostingan extends StatefulWidget {
   final String id;
-  const UpdatePostingan({super.key, required this.id});
+  UpdatePostingan({super.key, required this.id});
 
   @override
   State<UpdatePostingan> createState() => _UpdatePostinganState();
@@ -14,7 +15,6 @@ class _UpdatePostinganState extends State<UpdatePostingan> {
   final TextEditingController judulController = TextEditingController();
   final TextEditingController fileController = TextEditingController();
   final TextEditingController deskripsiController = TextEditingController();
-
 
   GetSigita? getSigitaList;
 
@@ -33,21 +33,36 @@ class _UpdatePostinganState extends State<UpdatePostingan> {
   }
 
   void updateData() async {
-      await UpdatePostinganAdmin.updatePostinganAdmin(widget.id, judulController.text, fileController.text, deskripsiController.text);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Data Berhasil Tersimpan")));
+    try {
+      await UpdatePostinganAdmin.updatePostinganAdmin(
+        widget.id,
+        judulController.text,
+        fileController.text,
+        deskripsiController.text,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Data Berhasil Tersimpan")),
+      );
       Navigator.pop(context);
+    } catch (e) {
+      // Menangani kesalahan saat memperbarui data
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error saat menyimpan data: $e")),
+      );
+    }
   }
 
   void loadData() async {
-    try{
+    try {
       final user = await GetSigita.connApiDetail(widget.id);
       setState(() {
         judulController.text = user.title.toString();
         fileController.text = user.file.toString();
         deskripsiController.text = user.content.toString();
       });
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -167,7 +182,7 @@ class _UpdatePostinganState extends State<UpdatePostingan> {
                         ),
                       ),
                       onPressed: () {
-                          updateData();
+                        updateData();
                       },
                       child: const Text("Update"),
                     ),

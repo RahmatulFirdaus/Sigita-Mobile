@@ -24,7 +24,7 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
       getPostingan = getPosting;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,16 +35,19 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: PaginatedDataTable(
-                  header: const Text("Tabel Postingan", textAlign: TextAlign.center,),
-                  columns: const [
-                    DataColumn(label: Text("No")),
-                    DataColumn(label: Text("Judul")),
-                    DataColumn(label: Text("Kategori")),
-                    DataColumn(label: Text("File")),
-                    DataColumn(label: Text("Deskripsi")),
-                    DataColumn(label: Text("Jumlah Download")),
-                    DataColumn(label: Text("Jumlah Komentar")),
-                    DataColumn(label: Text("Aksi")),
+                  header: const Text(
+                    "Tabel Postingan",
+                    textAlign: TextAlign.center,
+                  ),
+                  columns: [
+                    const DataColumn(label: Text("No")),
+                    const DataColumn(label: Text("Judul")),
+                    const DataColumn(label: Text("Kategori")),
+                    const DataColumn(label: Text("File")),
+                    const DataColumn(label: Text("Deskripsi")),
+                    const DataColumn(label: Text("Jumlah Download")),
+                    const DataColumn(label: Text("Jumlah Komentar")),
+                    const DataColumn(label: Text("Aksi")),
                   ],
                   source: MyDataSource(getPostingan: getPostingan, context: context), // Pass context here
                   rowsPerPage: 10,
@@ -60,9 +63,9 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
 
 class MyDataSource extends DataTableSource {
   final List<GetPostinganAdmin> getPostingan;
-  final BuildContext context; // Add context as a member variable
+  final BuildContext context;
 
-  MyDataSource({required this.getPostingan, required this.context}); // Update constructor
+  MyDataSource({required this.getPostingan, required this.context});
 
   @override
   DataRow? getRow(int index) {
@@ -76,8 +79,8 @@ class MyDataSource extends DataTableSource {
       DataCell(Text(postingan.category)),
       DataCell(Text(postingan.file)),
       DataCell(Text(postingan.content)),
-      DataCell(Text(postingan.jumlah_download)),
-      DataCell(Text(postingan.jumlah_komentar)),
+      DataCell(Text(postingan.jumlah_download.toString())), // Assuming this is a numeric value
+      DataCell(Text(postingan.jumlah_komentar.toString())), // Assuming this is a numeric value
       DataCell(
         Row(
           children: [
@@ -93,7 +96,39 @@ class MyDataSource extends DataTableSource {
               icon: const Icon(Icons.edit),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    content: const Text("Apakah Anda yakin ingin menghapus postingan ini?"),
+                    actions: [
+                      TextButton(
+                        child: const Text("Batal"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: const Text("Hapus"),
+                        onPressed: () async {
+                          Navigator.pop(context); // Menutup dialog
+                          try {
+                            await DeletePostinganAdmin.deletePostinganAdmin(postingan.id); // Menambahkan await
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Data Berhasil Dihapus")),
+                            );
+                            // Refresh data setelah menghapus
+                            await (context.findAncestorStateOfType<_AdminpostinganpageState>()?.fetchData());
+                          } catch (e) {
+                            // Menangani kesalahan saat menghapus data
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Error saat menghapus data: $e")),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
               icon: const Icon(Icons.delete),
             ),
           ],
