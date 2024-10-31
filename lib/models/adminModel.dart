@@ -25,7 +25,7 @@ class GetTotalPostingan {
 
   static Future<List<GetTotalPostingan>> getTotalPostingan() async {
     Uri url = Uri.parse(
-        "http://192.168.1.4:3000/api/getTotalPostinganDownloadKomentar");
+        "http://10.0.10.58:3000/api/getTotalPostinganDownloadKomentar");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -60,7 +60,7 @@ class GetPostinganAdmin {
   });
 
   static Future<List<GetPostinganAdmin>> getPostinganAdmin() async {
-    Uri url = Uri.parse("http://192.168.1.4:3000/api/getPostinganAdmin");
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/getPostinganAdmin");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -89,7 +89,7 @@ class GetKategoriAdmin {
   });
 
   static Future<List<GetKategoriAdmin>> getKategoriAdmin() async {
-    Uri url = Uri.parse("http://192.168.1.4:3000/api/getKategoriAdmin");
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/getKategoriAdmin");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -113,7 +113,7 @@ class UpdatePostinganAdmin {
   });
 
   static Future<UpdatePostinganAdmin> updatePostinganAdmin(String id, String judul, String file, String deskripsi) async {
-    Uri url = Uri.parse("http://192.168.1.4:3000/api/updatePostingan/$id");
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/updatePostingan/$id");
     var hasilResponse = await http.patch(url, body: {
       "judul": judul,
       "file": file,
@@ -135,9 +135,41 @@ class DeletePostinganAdmin {
   });
 
   static Future<DeletePostinganAdmin> deletePostinganAdmin(String id) async {
-    Uri url = Uri.parse("http://192.168.1.4:3000/api/deletePostingan/$id");
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/deletePostingan/$id");
     var hasilResponse = await http.delete(url);
     var jsonData = jsonDecode(hasilResponse.body);
     return DeletePostinganAdmin(id: jsonData['id'].toString());
+  }
+}
+
+class PostPostinganAdmin{
+  String id, id_kategori, judul, file, deskripsi, tanggal;
+
+  PostPostinganAdmin({
+    required this.id,
+    required this.id_kategori,
+    required this.judul,
+    required this.file,
+    required this.deskripsi,
+    required this.tanggal,
+  });
+
+  static Future<PostPostinganAdmin> postPostinganAdmin(String id_kategori, String judul, String file, String deskripsi, String tanggal) async {
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/postPostingan");
+    var hasilResponse = await http.post(url, body: {
+      "id_kategori": id_kategori,
+      "judul": judul,
+      "file": file,
+      "deskripsi": deskripsi,
+      "tanggal": tanggal,
+    });
+    var jsonData = jsonDecode(hasilResponse.body);
+    return PostPostinganAdmin(
+        id: jsonData['id'].toString(),
+        id_kategori: jsonData['id_kategori'].toString(),
+        judul: jsonData['judul'].toString(),
+        file: jsonData['file'].toString(),
+        deskripsi: jsonData['deskripsi'].toString(),
+        tanggal: jsonData['tanggal'].toString());
   }
 }

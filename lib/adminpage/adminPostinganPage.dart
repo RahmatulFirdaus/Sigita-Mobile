@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sigita_final_project/adminpage/edit_page/postingan.dart';
+import 'package:sigita_final_project/adminpage/tambah_page/tambah_postingan.dart';
 import 'package:sigita_final_project/models/adminModel.dart';
 
 class Adminpostinganpage extends StatefulWidget {
@@ -53,6 +54,15 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
                   rowsPerPage: 10,
                 ),
               ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddPostingan()),
+                );
+              },
+              child: const Text("Tambah"),
             ),
           ],
         ),

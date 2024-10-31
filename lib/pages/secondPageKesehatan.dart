@@ -23,6 +23,7 @@ class _PageProposalState extends State<PageProposal> {
   List<GetKomentar> dataKomentar = [];
   GetPesan dataPesan = GetPesan(pesan: "");
 
+
   @override
   void initState() {
     super.initState();
@@ -239,7 +240,8 @@ class _PageProposalState extends State<PageProposal> {
                                 ),
                               );
                             } else {
-                              launchUrl(Uri.parse(dataFile.pdf));
+                              await PermissionFile.postDownload(widget.id, simpanEmailDownload.text);
+                              launchUrl(Uri.parse(dataFile.pdf));       
                             }
                           },
                         ),
@@ -262,7 +264,7 @@ class _PageProposalState extends State<PageProposal> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => Viewpdfpage(
-                                data: dataFile.pdf,
+                                data: dataFile.pdf, 
                               )));
                 },
                 child: const Text(
