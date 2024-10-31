@@ -29,6 +29,22 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+      backgroundColor: Colors.black,
+        title: const Text(""),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add, color: Colors.white,),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddPostingan()),
+                );
+            },
+          ),
+        ],),
+        
       body: SafeArea(
         child: Column(
           children: [
@@ -54,15 +70,6 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
                   rowsPerPage: 10,
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddPostingan()),
-                );
-              },
-              child: const Text("Tambah"),
             ),
           ],
         ),

@@ -67,7 +67,7 @@ class GetPostinganAdmin {
     return dataList.map((user) {
       return GetPostinganAdmin(
         id: user['id'].toString(),
-        title: user['judul'],
+        title: user['judul'].toString(),
         file: user['file'],
         content: user['deskripsi'],
         date: user['tanggal'].toString(),
@@ -155,7 +155,7 @@ class PostPostinganAdmin{
   });
 
   static Future<PostPostinganAdmin> postPostinganAdmin(String id_kategori, String judul, String file, String deskripsi, String tanggal) async {
-    Uri url = Uri.parse("http://10.0.10.58:3000/api/postPostingan");
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/uploadFileAdmin");
     var hasilResponse = await http.post(url, body: {
       "id_kategori": id_kategori,
       "judul": judul,
