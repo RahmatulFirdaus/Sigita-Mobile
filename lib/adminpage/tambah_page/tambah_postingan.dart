@@ -26,7 +26,6 @@ class _AddPostinganState extends State<AddPostingan> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
-
   File? _file;
 
   @override
@@ -50,20 +49,19 @@ class _AddPostinganState extends State<AddPostingan> {
   }
 
   Future<void> _pickFile() async {
-  FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-  if (result != null) {
-    // Proses asinkron dilakukan di luar setState
-    _file = File(result.files.single.path!);
-    String newFileName = await _generateFileName(_file!);
+    if (result != null) {
+      // Proses asinkron dilakukan di luar setState
+      _file = File(result.files.single.path!);
+      String newFileName = await _generateFileName(_file!);
 
-    // setState hanya digunakan untuk memperbarui UI
-    setState(() {
-      fileController.text = newFileName;
-    });
+      // setState hanya digunakan untuk memperbarui UI
+      setState(() {
+        fileController.text = newFileName;
+      });
+    }
   }
-}
-
 
   Future<void> _selectDateTime(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -88,10 +86,10 @@ class _AddPostinganState extends State<AddPostingan> {
             pickedTime.hour,
             pickedTime.minute,
           );
-          
+
           // Format the date and time as shown in your example
-          String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss')
-              .format(selectedDate);
+          String formattedDateTime =
+              DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDate);
           tanggalController.text = formattedDateTime;
         });
       }
@@ -99,41 +97,38 @@ class _AddPostinganState extends State<AddPostingan> {
   }
 
   Future<void> uploadFileWithFormData({
-  required String id_kategori,
-  required String judul,
-  required String deskripsi,
-  required String tanggal,
-}) async {
-  if (_file == null) return;
+    required String id_kategori,
+    required String judul,
+    required String deskripsi,
+    required String tanggal,
+  }) async {
+    if (_file == null) return;
 
-  var uri = Uri.parse("http://10.0.10.58:3000/api/uploadFileAdmin");
-  var request = http.MultipartRequest('POST', uri);
+    var uri = Uri.parse("http://10.0.10.58:3000/api/uploadFileAdmin");
+    var request = http.MultipartRequest('POST', uri);
 
-  // Tambahkan file ke dalam request
-  request.files.add(
-    await http.MultipartFile.fromPath(
-      'file',
-      _file!.path,
-      filename: fileController.text,
-    ),
-  );
+    // Tambahkan file ke dalam request
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'file',
+        _file!.path,
+        filename: fileController.text,
+      ),
+    );
 
-  // Tambahkan data lain ke dalam request
-  request.fields['id_kategori'] = id_kategori;
-  request.fields['judul'] = judul;
-  request.fields['deskripsi'] = deskripsi;
-  request.fields['tanggal'] = tanggal;
+    request.fields['id_kategori'] = id_kategori;
+    request.fields['judul'] = judul;
+    request.fields['deskripsi'] = deskripsi;
+    request.fields['tanggal'] = tanggal;
+    
+    var response = await request.send();
 
-  // Kirim request dan tangani respons
-  var response = await request.send();
-
-  if (response.statusCode == 200) {
-    print("File and data uploaded successfully!");
-  } else {
-    print("Failed to upload file and data.");
+    if (response.statusCode == 200) {
+      print("File and data uploaded successfully!");
+    } else {
+      print("Failed to upload file and data.");
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -247,20 +242,20 @@ class _AddPostinganState extends State<AddPostingan> {
                 ),
               ),
               Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TextField(
-                controller: tanggalController,
-                readOnly: true,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                  border: InputBorder.none,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onTap: () => _selectDateTime(context),
+                child: TextField(
+                  controller: tanggalController,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    border: InputBorder.none,
+                  ),
+                  onTap: () => _selectDateTime(context),
+                ),
               ),
-            ),
               const SizedBox(height: 35),
               Row(
                 children: [
@@ -281,22 +276,28 @@ class _AddPostinganState extends State<AddPostingan> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 131, 255, 135),
+                        backgroundColor:
+                            const Color.fromARGB(255, 131, 255, 135),
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () async {
-                        if (_file != null) {
-                        uploadFileWithFormData(id_kategori: idKategori!, judul: judulController.text, deskripsi: deskripsiController.text, tanggal: tanggalController.text);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Data Berhasil Tersimpan")),
-                        );
-                        // Navigator.pop(context);
-                        }else{
+                        try{
+                          uploadFileWithFormData(
+                              id_kategori: idKategori!,
+                              judul: judulController.text,
+                              deskripsi: deskripsiController.text,
+                              tanggal: tanggalController.text);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("File Harus Diisi")),
+                            const SnackBar(
+                                content: Text("Data Berhasil Tersimpan")),
+                          );
+                          Navigator.pop(context);
+                        } catch(e){ 
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Data Gagal Tersimpan")),
                           );
                         }
                       },

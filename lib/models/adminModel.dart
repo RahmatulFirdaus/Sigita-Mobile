@@ -127,6 +127,24 @@ class UpdatePostinganAdmin {
   }
 }
 
+class UpdateKategoriAdmin{
+  String kategori;
+
+  UpdateKategoriAdmin({
+    required this.kategori
+  });
+
+  static Future<UpdateKategoriAdmin> updateKategoriAdmin(String id, String kategori)async{
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/updateKategori/$id");
+    var hasilResponse = await http.patch(url,
+    body: {
+      "kategori": kategori
+    });
+    var jsonData = jsonDecode(hasilResponse.body);
+    return UpdateKategoriAdmin(kategori: jsonData['kategori'].toString());
+  }
+}
+
 class DeletePostinganAdmin {
   String id;
 
@@ -139,6 +157,21 @@ class DeletePostinganAdmin {
     var hasilResponse = await http.delete(url);
     var jsonData = jsonDecode(hasilResponse.body);
     return DeletePostinganAdmin(id: jsonData['id'].toString());
+  }
+}
+
+class DeleteKategoriAdmin {
+  String id;
+
+  DeleteKategoriAdmin({
+    required this.id, 
+  });
+
+  static Future<DeleteKategoriAdmin> deleteKategoriAdmin(String id) async {
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/deleteKategori/$id");
+    var hasilResponse = await http.delete(url);
+    var jsonData = jsonDecode(hasilResponse.body);
+    return DeleteKategoriAdmin(id: jsonData['id'].toString());
   }
 }
 
@@ -171,5 +204,38 @@ class PostPostinganAdmin{
         file: jsonData['file'].toString(),
         deskripsi: jsonData['deskripsi'].toString(),
         tanggal: jsonData['tanggal'].toString());
+  }
+}
+
+class PostKategoriAdmin{
+  String namaKategori;
+
+  PostKategoriAdmin({
+    required this.namaKategori
+  });
+
+  static Future<PostKategoriAdmin> postKategoriAdmin(String namaKategori) async{
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/postKategoriAdmin");
+    var hasilResponse = await http.post(url, body: {
+      "kategori": namaKategori
+    });
+    var jsonData = jsonDecode(hasilResponse.body);
+    return PostKategoriAdmin(namaKategori: jsonData['kategori'].toString());
+  }
+}
+
+class GetKategoriAdminDetail{
+  String kategori;
+
+  GetKategoriAdminDetail({
+    required this.kategori
+  });
+
+  static Future<GetKategoriAdminDetail> getKategoriAdminDetail(String id) async{
+    Uri url = Uri.parse("http://10.0.10.58:3000/api/getKategoriDetail/$id");
+    var hasilResponse = await http.get(url);
+    var jsonData = jsonDecode(hasilResponse.body);
+    var user = jsonData["data"][0];
+    return GetKategoriAdminDetail(kategori: user['kategori'].toString());
   }
 }

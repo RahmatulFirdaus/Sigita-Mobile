@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:sigita_final_project/adminpage/edit_page/kategori.dart';
+import 'package:sigita_final_project/adminpage/tambah_page/tambah_kategori.dart';
 import 'package:sigita_final_project/models/adminModel.dart';
 
 class Adminkategoripage extends StatefulWidget {
@@ -18,7 +20,7 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
     fetchData();
   }
 
-  void fetchData() async {
+  Future<void> fetchData() async {
     final getKategoriFetch = await GetKategoriAdmin.getKategoriAdmin();
     setState(() {
       getKategoriList = getKategoriFetch;
@@ -28,6 +30,21 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       backgroundColor: Colors.white,
+      appBar: AppBar(
+      backgroundColor: Colors.black,
+        title: const Text(""),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add, color: Colors.white,),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddKategori()),
+                );
+            },
+          ),
+        ],),
       body: SafeArea(
         child: Column(
           children: [
@@ -45,7 +62,7 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
                       const DataColumn(label: Text("Jumlah Postingan")),
                       const DataColumn(label: Text("Aksi"))
                     ],
-                    source: MyDataSource(getKategori: getKategoriList),
+                    source: MyDataSource(getKategori: getKategoriList, context: context),
                     rowsPerPage: 10),
               ),
             ),
@@ -58,8 +75,8 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
 
 class MyDataSource extends DataTableSource {
   final List<GetKategoriAdmin> getKategori;
-
-  MyDataSource({required this.getKategori});
+  final BuildContext context;
+  MyDataSource({required this.getKategori, required this.context});
 
   @override
   DataRow? getRow(int index) {
@@ -72,11 +89,45 @@ class MyDataSource extends DataTableSource {
       DataCell(Row(
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditKategori(id: kategori.id)
+              ));
+            },
             icon: const Icon(Icons.edit),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    content: const Text("Apakah Anda yakin ingin menghapus postingan ini?"),
+                    actions: [
+                      TextButton(
+                        child: const Text("Batal"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: const Text("Hapus"),
+                        onPressed: () async {
+                          try {
+                            await DeleteKategoriAdmin.deleteKategoriAdmin(kategori.id); 
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Data Berhasil Dihapus")),
+                            );
+                            await (context.findAncestorStateOfType<_AdminkategoripageState>()?.fetchData());
+                          } catch (e) {
+                            // Menangani kesalahan saat menghapus data
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Error saat menghapus data: $e")),
+                            );
+                          }
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+            },
             icon: const Icon(Icons.delete),
           ),
         ],
