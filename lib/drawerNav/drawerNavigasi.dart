@@ -69,6 +69,13 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
                       width: 90,
                       height: 90,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, exception, stackTrace) {
+                        return Icon(
+                          Icons.broken_image,
+                          size: 90,
+                          color: const Color.fromARGB(255, 255, 17, 0),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -142,8 +149,10 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
                 ),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Loginadminpage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Loginadminpage()));
               },
             ),
           ],

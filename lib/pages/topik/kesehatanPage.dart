@@ -149,6 +149,7 @@ class _KesehatanpageState extends State<Kesehatanpage> {
                                   ],
                                 ),
                                 child: SingleChildScrollView(
+                                  physics: const NeverScrollableScrollPhysics(),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
