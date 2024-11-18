@@ -112,7 +112,8 @@ class UpdatePostinganAdmin {
     required this.file,
   });
 
-  static Future<UpdatePostinganAdmin> updatePostinganAdmin(String id, String judul, String file, String deskripsi) async {
+  static Future<UpdatePostinganAdmin> updatePostinganAdmin(
+      String id, String judul, String file, String deskripsi) async {
     Uri url = Uri.parse("http://10.0.10.58:3000/api/updatePostingan/$id");
     var hasilResponse = await http.patch(url, body: {
       "judul": judul,
@@ -127,19 +128,15 @@ class UpdatePostinganAdmin {
   }
 }
 
-class UpdateKategoriAdmin{
+class UpdateKategoriAdmin {
   String kategori;
 
-  UpdateKategoriAdmin({
-    required this.kategori
-  });
+  UpdateKategoriAdmin({required this.kategori});
 
-  static Future<UpdateKategoriAdmin> updateKategoriAdmin(String id, String kategori)async{
+  static Future<UpdateKategoriAdmin> updateKategoriAdmin(
+      String id, String kategori) async {
     Uri url = Uri.parse("http://10.0.10.58:3000/api/updateKategori/$id");
-    var hasilResponse = await http.patch(url,
-    body: {
-      "kategori": kategori
-    });
+    var hasilResponse = await http.patch(url, body: {"kategori": kategori});
     var jsonData = jsonDecode(hasilResponse.body);
     return UpdateKategoriAdmin(kategori: jsonData['kategori'].toString());
   }
@@ -164,7 +161,7 @@ class DeleteKategoriAdmin {
   String id;
 
   DeleteKategoriAdmin({
-    required this.id, 
+    required this.id,
   });
 
   static Future<DeleteKategoriAdmin> deleteKategoriAdmin(String id) async {
@@ -175,7 +172,7 @@ class DeleteKategoriAdmin {
   }
 }
 
-class PostPostinganAdmin{
+class PostPostinganAdmin {
   String id, id_kategori, judul, file, deskripsi, tanggal;
 
   PostPostinganAdmin({
@@ -187,7 +184,8 @@ class PostPostinganAdmin{
     required this.tanggal,
   });
 
-  static Future<PostPostinganAdmin> postPostinganAdmin(String id_kategori, String judul, String file, String deskripsi, String tanggal) async {
+  static Future<PostPostinganAdmin> postPostinganAdmin(String id_kategori,
+      String judul, String file, String deskripsi, String tanggal) async {
     Uri url = Uri.parse("http://10.0.10.58:3000/api/uploadFileAdmin");
     var hasilResponse = await http.post(url, body: {
       "id_kategori": id_kategori,
@@ -207,31 +205,27 @@ class PostPostinganAdmin{
   }
 }
 
-class PostKategoriAdmin{
+class PostKategoriAdmin {
   String namaKategori;
 
-  PostKategoriAdmin({
-    required this.namaKategori
-  });
+  PostKategoriAdmin({required this.namaKategori});
 
-  static Future<PostKategoriAdmin> postKategoriAdmin(String namaKategori) async{
+  static Future<PostKategoriAdmin> postKategoriAdmin(
+      String namaKategori) async {
     Uri url = Uri.parse("http://10.0.10.58:3000/api/postKategoriAdmin");
-    var hasilResponse = await http.post(url, body: {
-      "kategori": namaKategori
-    });
+    var hasilResponse = await http.post(url, body: {"kategori": namaKategori});
     var jsonData = jsonDecode(hasilResponse.body);
     return PostKategoriAdmin(namaKategori: jsonData['kategori'].toString());
   }
 }
 
-class GetKategoriAdminDetail{
+class GetKategoriAdminDetail {
   String kategori;
 
-  GetKategoriAdminDetail({
-    required this.kategori
-  });
+  GetKategoriAdminDetail({required this.kategori});
 
-  static Future<GetKategoriAdminDetail> getKategoriAdminDetail(String id) async{
+  static Future<GetKategoriAdminDetail> getKategoriAdminDetail(
+      String id) async {
     Uri url = Uri.parse("http://10.0.10.58:3000/api/getKategoriDetail/$id");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);

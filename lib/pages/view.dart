@@ -16,9 +16,7 @@ class _ViewpdfpageState extends State<Viewpdfpage> {
       appBar: AppBar(
         title: const Text("Back"),
       ),
-      body: Container(
-          child: SfPdfViewer.network(
-              "${widget.data}")),
+      body: Container(child: SfPdfViewer.network("${widget.data}")),
     );
   }
-} 
+}

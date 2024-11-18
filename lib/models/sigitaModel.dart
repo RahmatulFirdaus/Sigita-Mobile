@@ -53,8 +53,6 @@ class GetSigita {
   }
 }
 
-
-
 class PostSigita {
   String id_postinganw;
   String email, komentar;
