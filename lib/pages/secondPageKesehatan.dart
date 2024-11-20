@@ -18,11 +18,17 @@ class _PageProposalState extends State<PageProposal> {
   TextEditingController simpanEmail = TextEditingController();
   TextEditingController simpanEmailDownload = TextEditingController();
   GetSigita dataRespon = GetSigita(
-      id: "", title: "", content: "",file: "", date: "", category: "", jumlah: "", id_kategori: "");
+      id: "",
+      title: "",
+      content: "",
+      file: "",
+      date: "",
+      category: "",
+      jumlah: "",
+      idKategori: "");
   GetFile dataFile = GetFile(pdf: "");
   List<GetKomentar> dataKomentar = [];
   GetPesan dataPesan = GetPesan(pesan: "");
-
 
   @override
   void initState() {
@@ -111,8 +117,8 @@ class _PageProposalState extends State<PageProposal> {
                               color: Colors.black.withOpacity(0.3),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset:
-                                  const Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
                             ),
                           ],
                           borderRadius: BorderRadius.circular(50),
@@ -125,13 +131,15 @@ class _PageProposalState extends State<PageProposal> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           } else if (snapshot.hasError) {
                             return const Center(
                                 child: Text('Harap Buka Ulang Aplikasi'));
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
-                            return const Center(child: Text('Belum Ada Komentar'));
+                            return const Center(
+                                child: Text('Belum Ada Komentar'));
                           } else {
                             List<GetKomentar> dataKomentar =
                                 snapshot.data!; // Ambil data komentar
@@ -240,8 +248,9 @@ class _PageProposalState extends State<PageProposal> {
                                 ),
                               );
                             } else {
-                              await PermissionFile.postDownload(widget.id, simpanEmailDownload.text);
-                              launchUrl(Uri.parse(dataFile.pdf));       
+                              await PermissionFile.postDownload(
+                                  widget.id, simpanEmailDownload.text);
+                              launchUrl(Uri.parse(dataFile.pdf));
                             }
                           },
                         ),
@@ -264,7 +273,7 @@ class _PageProposalState extends State<PageProposal> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => Viewpdfpage(
-                                data: dataFile.pdf, 
+                                data: dataFile.pdf,
                               )));
                 },
                 child: const Text(
@@ -361,14 +370,16 @@ class _PageProposalState extends State<PageProposal> {
                 onPressed: () async {
                   if (simpanEmail.text.isEmpty || simpanKomentar.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Email dan Komentar harus diisi")),
+                      const SnackBar(
+                          content: Text("Email dan Komentar harus diisi")),
                     );
                   } else {
                     await PostSigita.postSigita(
                         dataRespon.id, simpanEmail.text, simpanKomentar.text);
                     FocusScope.of(context).unfocus();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Komentar Berhasil Dimasukkan")),
+                      const SnackBar(
+                          content: Text("Komentar Berhasil Dimasukkan")),
                     );
                   }
                 },
