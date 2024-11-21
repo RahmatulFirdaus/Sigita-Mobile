@@ -38,7 +38,7 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
     pdf.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
-        margin: pw.EdgeInsets.all(30),
+        margin: const pw.EdgeInsets.all(30),
         build: (pw.Context context) {
           return [
             // Header
@@ -60,19 +60,19 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
                 width: 1,
               ),
               columnWidths: {
-                0: pw.FlexColumnWidth(0.5), // No
-                1: pw.FlexColumnWidth(2), // Kategori
-                2: pw.FlexColumnWidth(1), // Jumlah Postingan
+                0: const pw.FlexColumnWidth(0.5), // No
+                1: const pw.FlexColumnWidth(2), // Kategori
+                2: const pw.FlexColumnWidth(1), // Jumlah Postingan
               },
               children: [
                 // Table Header
                 pw.TableRow(
-                  decoration: pw.BoxDecoration(
+                  decoration: const pw.BoxDecoration(
                     color: PdfColors.grey300,
                   ),
                   children: [
                     pw.Padding(
-                      padding: pw.EdgeInsets.all(5),
+                      padding: const pw.EdgeInsets.all(5),
                       child: pw.Text(
                         'No',
                         style: pw.TextStyle(
@@ -83,7 +83,7 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
                       ),
                     ),
                     pw.Padding(
-                      padding: pw.EdgeInsets.all(5),
+                      padding: const pw.EdgeInsets.all(5),
                       child: pw.Text(
                         'Kategori',
                         style: pw.TextStyle(
@@ -93,7 +93,7 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
                       ),
                     ),
                     pw.Padding(
-                      padding: pw.EdgeInsets.all(5),
+                      padding: const pw.EdgeInsets.all(5),
                       child: pw.Text(
                         'Jumlah Postingan',
                         style: pw.TextStyle(
@@ -110,25 +110,25 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
                 ...getKategoriList.map((data) => pw.TableRow(
                       children: [
                         pw.Padding(
-                          padding: pw.EdgeInsets.all(5),
+                          padding: const pw.EdgeInsets.all(5),
                           child: pw.Text(
                             data.id.toString(),
-                            style: pw.TextStyle(fontSize: 10),
+                            style: const pw.TextStyle(fontSize: 10),
                             textAlign: pw.TextAlign.center,
                           ),
                         ),
                         pw.Padding(
-                          padding: pw.EdgeInsets.all(5),
+                          padding: const pw.EdgeInsets.all(5),
                           child: pw.Text(
                             data.kategori,
-                            style: pw.TextStyle(fontSize: 10),
+                            style: const pw.TextStyle(fontSize: 10),
                           ),
                         ),
                         pw.Padding(
-                          padding: pw.EdgeInsets.all(5),
+                          padding: const pw.EdgeInsets.all(5),
                           child: pw.Text(
                             data.jumlahPostingan.toString(),
-                            style: pw.TextStyle(fontSize: 10),
+                            style: const pw.TextStyle(fontSize: 10),
                             textAlign: pw.TextAlign.center,
                           ),
                         ),

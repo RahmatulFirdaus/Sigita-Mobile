@@ -43,12 +43,14 @@ class Faqpage extends StatelessWidget {
               ),
             ),
             _buildFAQCard(
+              context,
               icon: Icons.payment,
               title: 'Apakah ada biaya untuk mengikuti modul di SIGITA?',
               description:
                   "Beberapa modul di SIGITA gratis, namun ada juga modul premium yang memerlukan biaya. Informasi lebih lanjut mengenai biaya dapat dilihat pada halaman modul di situs web kami.",
             ),
             _buildFAQCard(
+              context,
               icon: Icons.support_agent,
               title:
                   'Bagaimana cara mendapatkan bantuan jika mengalami kesulitan?',
@@ -56,6 +58,7 @@ class Faqpage extends StatelessWidget {
                   "Jika Anda mengalami kesulitan atau memiliki pertanyaan, Anda bisa menghubungi tim dukungan kami melalui fitur kontak di situs web atau melalui email.",
             ),
             _buildFAQCard(
+              context,
               icon: Icons.update,
               title: 'Apakah materi di SIGITA selalu diperbarui?',
               description:
@@ -67,7 +70,8 @@ class Faqpage extends StatelessWidget {
     );
   }
 
-  Widget _buildFAQCard({
+  Widget _buildFAQCard(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String description,
@@ -86,40 +90,45 @@ class Faqpage extends StatelessWidget {
           ),
         ],
       ),
-      child: ExpansionTile(
-        leading: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue[50],
-          ),
-          padding: const EdgeInsets.all(8),
-          child: Icon(
-            icon,
-            color: Colors.blue,
-            size: 24,
-          ),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
         ),
-        title: Text(
-          title,
-          style: GoogleFonts.poppins(
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-          ),
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              description,
-              style: GoogleFonts.poppins(
-                color: Colors.black87,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.justify,
+        child: ExpansionTile(
+          leading: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.blue[50],
+            ),
+            padding: const EdgeInsets.all(8),
+            child: Icon(
+              icon,
+              color: Colors.blue,
+              size: 24,
             ),
           ),
-        ],
+          title: Text(
+            title,
+            style: GoogleFonts.poppins(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                description,
+                style: GoogleFonts.poppins(
+                  color: Colors.black87,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.justify,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

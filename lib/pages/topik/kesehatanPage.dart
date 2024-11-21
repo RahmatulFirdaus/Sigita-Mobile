@@ -215,7 +215,7 @@ class _KesehatanpageState extends State<Kesehatanpage> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[50],
-                          foregroundColor: Colors.blue,
+                          foregroundColor: Colors.blueGrey,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

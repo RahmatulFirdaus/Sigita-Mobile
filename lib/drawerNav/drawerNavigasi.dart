@@ -95,27 +95,40 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
                 ));
               },
             ),
-            ExpansionTile(
-              leading: const Icon(Icons.pageview),
-              title: const Text("Topik", style: TextStyle(fontSize: 14)),
-              children: dataKategori.map((kategori) {
-                return ListTile(
-                  title: Text(
-                    kategori.kategori,
-                    style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(fontSize: 14),
+            Theme(
+              data: Theme.of(context).copyWith(
+                dividerColor: Colors.transparent,
+              ),
+              child: ExpansionTile(
+                leading: const Icon(Icons.pageview),
+                title: const Text("Topik", style: TextStyle(fontSize: 14)),
+                children: dataKategori.map((kategori) {
+                  return Container(
+                    // color: Colors.red,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.find_in_page_rounded,
+                        color: Colors.blue.withOpacity(0.5),
+                      ),
+                      title: Text(
+                        kategori.kategori,
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(fontSize: 14),
+                        ),
+                      ),
+                      onTap: () {
+                        _selectedIndex = dataKategori.indexOf(kategori);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    pageList[_selectedIndex]['halaman']));
+                      },
                     ),
-                  ),
-                  onTap: () {
-                    _selectedIndex = dataKategori.indexOf(kategori);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                pageList[_selectedIndex]['halaman']));
-                  },
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.question_answer),
