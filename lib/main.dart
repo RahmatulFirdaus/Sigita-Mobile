@@ -19,18 +19,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
+      theme: ThemeData(textTheme: GoogleFonts.comfortaaTextTheme()),
       title: "Sigita",
       // theme: ThemeData.light(),
       home: const OpeningSplashScreen(),
     );
   }
-}
-
-void restartApp(BuildContext context) {
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const MyApp()),
-    (route) => false,
-  );
 }

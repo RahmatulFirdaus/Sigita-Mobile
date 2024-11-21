@@ -26,7 +26,7 @@ class Masyarakatpage extends StatelessWidget {
               "Postingan tidak ada",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 24,
+                fontSize: 18,
               ),
             ))));
   }

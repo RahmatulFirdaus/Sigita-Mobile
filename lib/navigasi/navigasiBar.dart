@@ -11,14 +11,6 @@ class Navigasibar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.refresh_outlined, color: Colors.white,),
-          onPressed: (){
-            restartApp(context);
-          },
-        )
-      ],
       // Make AppBar transparent to allow the gradient to show
       backgroundColor: Colors.transparent,
       // Remove the default shadow
@@ -27,18 +19,12 @@ class Navigasibar extends StatelessWidget implements PreferredSizeWidget {
       // centerTitle: true,
       // Title of the AppBar
       title: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const SizedBox(width: 90),
           Image.asset(
             'images/logo.png',
             width: 30,
           ),
-          const SizedBox(width: 10),
-          const Text(
-        "SIGITA",
-        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 30, ),
-      ),
         ],
       ),
       // Add a gradient background using flexibleSpace
@@ -47,7 +33,7 @@ class Navigasibar extends StatelessWidget implements PreferredSizeWidget {
           gradient: LinearGradient(
             colors: [
               Color.fromRGBO(202, 248, 253, 1),
-               Colors.white,
+              Colors.white,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

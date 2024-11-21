@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sigita_final_project/drawerNav/drawerNavigasi.dart';
 import 'package:sigita_final_project/navigasi/navigasiBar.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Faqpage extends StatelessWidget {
   const Faqpage({super.key});
@@ -17,108 +18,105 @@ class Faqpage extends StatelessWidget {
               Colors.white,
               Color.fromRGBO(202, 248, 253, 1),
             ],
-            begin: Alignment.topCenter, // Titik awal gradien
-            end: Alignment.bottomCenter, // Titik akhir gradien
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset("images/think.png"),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                child: Text(
-                  "Pertanyaan yang Sering Diajukan",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Image.asset(
+              "images/think.png",
+              fit: BoxFit.cover,
+              height: 300,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              child: Text(
+                "Pertanyaan yang Sering Diajukan",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 30),
-              buildSection(
-                icon: Icons.done_all,
-                title: 'Apakah ada biaya untuk mengikuti modul di SIGITA',
-                description:
-                    "Beberapa modul di SIGITA gratis, namun ada juga modul premium yang memerlukan biaya. Informasi lebih lanjut mengenai biaya dapat dilihat pada halaman modul di situs web kami.",
-              ),
-              const SizedBox(height: 20), // Menambahkan jarak antar section
-              buildSection(
-                icon: Icons.done_all,
-                title:
-                    'Bagaimana cara mendapatkan bantuan jika mengalami kesulitan?',
-                description:
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-              ),
-              const SizedBox(height: 20), // Menambahkan jarak antar section
-              buildSection(
-                icon: Icons.done_all,
-                title: 'Apakah materi di SIGITA selalu diperbarui?',
-                description:
-                    "All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate ",
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+            _buildFAQCard(
+              icon: Icons.payment,
+              title: 'Apakah ada biaya untuk mengikuti modul di SIGITA?',
+              description:
+                  "Beberapa modul di SIGITA gratis, namun ada juga modul premium yang memerlukan biaya. Informasi lebih lanjut mengenai biaya dapat dilihat pada halaman modul di situs web kami.",
+            ),
+            _buildFAQCard(
+              icon: Icons.support_agent,
+              title:
+                  'Bagaimana cara mendapatkan bantuan jika mengalami kesulitan?',
+              description:
+                  "Jika Anda mengalami kesulitan atau memiliki pertanyaan, Anda bisa menghubungi tim dukungan kami melalui fitur kontak di situs web atau melalui email.",
+            ),
+            _buildFAQCard(
+              icon: Icons.update,
+              title: 'Apakah materi di SIGITA selalu diperbarui?',
+              description:
+                  "Ya, kami secara rutin memperbarui materi pembelajaran kami untuk memastikan bahwa Anda mendapatkan informasi terbaru dan relevan di bidang keperawatan.",
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildSection({
+  Widget _buildFAQCard({
     required IconData icon,
     required String title,
     required String description,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              const CircleAvatar(backgroundColor: Color.fromARGB(255, 162, 213, 255), radius: 27),
-              const CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                  radius: 21),
-              CircleAvatar(
-                backgroundColor: const Color.fromARGB(255, 162, 213, 255),
-                radius: 18,
-                child: Icon(icon, size: 25, color: const Color.fromARGB(255, 0, 0, 0)),
-              ),
-            ],
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          const SizedBox(width: 10), // Jarak antara ikon dan teks
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                  const SizedBox(height: 11), // Jarak antara judul dan deskripsi
-                  Padding(
-                    padding: const EdgeInsets.only(left: 3),
-                    child: Text(
-                      description,
-                      textAlign: TextAlign.justify,
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ],
+        ],
+      ),
+      child: ExpansionTile(
+        leading: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue[50],
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Icon(
+            icon,
+            color: Colors.blue,
+            size: 24,
+          ),
+        ),
+        title: Text(
+          title,
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+          ),
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              description,
+              style: GoogleFonts.poppins(
+                color: Colors.black87,
+                fontSize: 14,
               ),
+              textAlign: TextAlign.justify,
             ),
           ),
         ],

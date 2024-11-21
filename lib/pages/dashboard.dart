@@ -33,7 +33,6 @@ class DashboardPage extends StatelessWidget {
               style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
             ),
 
@@ -51,7 +50,7 @@ class DashboardPage extends StatelessWidget {
               icon: Icons.book,
               title: 'Modul Pembelajaran Unggulan',
               description:
-                  "• Dasar-dasar Keperawatan: Anatomi, terminologi medis, teknik dasar\n• Keperawatan Klinis: Teknik perawatan, manajemen pasien\n• Keperawatan Spesialis: Modul khusus anak, geriatri, komunitas",
+                  "Dasar-dasar Keperawatan: Anatomi, terminologi medis, teknik dasar\nKeperawatan Klinis: Teknik perawatan, manajemen pasien\nKeperawatan Spesialis: Modul khusus anak, geriatri, komunitas",
             ),
 
             _buildInfoCard(
@@ -69,7 +68,7 @@ class DashboardPage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 color: Colors.black,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),
             ),
@@ -157,7 +156,7 @@ class DashboardPage extends StatelessWidget {
                     title,
                     style: GoogleFonts.poppins(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                       fontSize: 18,
                     ),
                   ),

@@ -26,7 +26,7 @@ class Peraturanpage extends StatelessWidget {
               "Postingan Tidak Ada",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 24,
+                fontSize: 18,
               ),
             ))));
   }

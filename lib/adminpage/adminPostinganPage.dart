@@ -238,6 +238,7 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
           generatePDF();
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }
@@ -308,11 +309,7 @@ class MyDataSource extends DataTableSource {
                                 ?.fetchData());
                           } catch (e) {
                             // Menangani kesalahan saat menghapus data
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content:
-                                      Text("Error saat menghapus data: $e")),
-                            );
+                            print(e);
                           }
                         },
                       ),

@@ -63,11 +63,11 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(90),
                     child: Image.network(
                       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUqiWQ4-b3TjwWaS_4GtAEW8WZ3BVWmC5kNw&s",
-                      width: 90,
-                      height: 90,
+                      width: 130,
+                      height: 130,
                       fit: BoxFit.cover,
                       errorBuilder: (context, exception, stackTrace) {
                         return Icon(
@@ -78,24 +78,14 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Rumah Sakit Jiwa Sambang Lihum",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 21,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
                 ],
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.home_outlined),
+              leading: const Icon(Icons.home),
               title: const Text(
                 "Dashboard",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 14),
               ),
               onTap: () {
                 Navigator.pushReplacement(context, MaterialPageRoute(
@@ -106,14 +96,14 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               },
             ),
             ExpansionTile(
-              leading: const Icon(Icons.pageview_outlined),
-              title: const Text("Topik"),
+              leading: const Icon(Icons.pageview),
+              title: const Text("Topik", style: TextStyle(fontSize: 14)),
               children: dataKategori.map((kategori) {
                 return ListTile(
                   title: Text(
                     kategori.kategori,
                     style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(fontSize: 16),
+                      textStyle: const TextStyle(fontSize: 14),
                     ),
                   ),
                   onTap: () {
@@ -128,11 +118,11 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               }).toList(),
             ),
             ListTile(
-              leading: const Icon(Icons.question_answer_outlined),
+              leading: const Icon(Icons.question_answer),
               title: Text(
                 "FAQ",
                 style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 16),
+                  textStyle: const TextStyle(fontSize: 14),
                 ),
               ),
               onTap: () {
@@ -141,11 +131,11 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.admin_panel_settings_outlined),
+              leading: const Icon(Icons.admin_panel_settings),
               title: Text(
-                "Admin Mode",
+                "Admin Section",
                 style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 16),
+                  textStyle: const TextStyle(fontSize: 14),
                 ),
               ),
               onTap: () {

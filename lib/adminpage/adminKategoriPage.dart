@@ -209,6 +209,7 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
             Icons.picture_as_pdf,
             color: Colors.white,
           )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }
