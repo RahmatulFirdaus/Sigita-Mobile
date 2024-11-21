@@ -7,16 +7,18 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PageProposal extends StatefulWidget {
   final String id;
-  const PageProposal({super.key, required this.id});
+  const PageProposal({Key? key, required this.id}) : super(key: key);
 
   @override
   State<PageProposal> createState() => _PageProposalState();
 }
 
 class _PageProposalState extends State<PageProposal> {
-  TextEditingController simpanKomentar = TextEditingController();
-  TextEditingController simpanEmail = TextEditingController();
-  TextEditingController simpanEmailDownload = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
+  final TextEditingController _downloadEmailController =
+      TextEditingController();
+
   GetSigita dataRespon = GetSigita(
       id: "",
       title: "",
@@ -28,472 +30,327 @@ class _PageProposalState extends State<PageProposal> {
       idKategori: "");
   GetFile dataFile = GetFile(pdf: "");
   List<GetKomentar> dataKomentar = [];
-  GetPesan dataPesan = GetPesan(pesan: "");
 
   @override
   void initState() {
     super.initState();
-    // Fetch data on initialization
     fetchData();
   }
 
   Future<void> fetchData() async {
     try {
-      // Mengambil semua data secara bertahap
       final responData = await GetSigita.connApiDetail(widget.id);
       final fileData = await GetFile.getFile(widget.id);
       final komentarData = await GetKomentar.getKomentar(widget.id);
-      final pesanData = await GetPesan.getPesan(widget.id);
 
-      // Menggunakan setState hanya sekali untuk semua perubahan
       setState(() {
         dataRespon = responData;
         dataFile = fileData;
         dataKomentar = komentarData;
-        dataPesan = pesanData;
       });
     } catch (e) {
-      // Handle error
       print('Error: $e');
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    simpanKomentar.dispose();
-    simpanEmail.dispose();
-    simpanEmailDownload.dispose();
+  void _submitComment() async {
+    if (_emailController.text.isEmpty || _commentController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email dan Komentar harus diisi")),
+      );
+      return;
+    }
+
+    await PostSigita.postSigita(
+        dataRespon.id, _emailController.text, _commentController.text);
+
+    FocusScope.of(context).unfocus();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Komentar Berhasil Dimasukkan")),
+    );
+
+    // Optional: Clear text fields after submission
+    _emailController.clear();
+    _commentController.clear();
+  }
+
+  void _downloadPDF() async {
+    if (_downloadEmailController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: Duration(seconds: 1),
+          content: Text("Email Tidak Boleh Kosong"),
+        ),
+      );
+      return;
+    }
+
+    await PermissionFile.postDownload(widget.id, _downloadEmailController.text);
+    launchUrl(Uri.parse(dataFile.pdf));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: const Navigasibar(), body: MainIndex());
-  }
-
-  SingleChildScrollView MainIndex() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.white,
-                  Color.fromRGBO(202, 248, 253, 1),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: const Navigasibar(),
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: fetchData,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildHeader(),
+                  const SizedBox(height: 16),
+                  _buildInfoRow(),
+                  const SizedBox(height: 16),
+                  _buildDescription(),
+                  const SizedBox(height: 16),
+                  _buildCommentSection(),
+                  const SizedBox(height: 16),
+                  _buildDownloadSection(),
                 ],
-                begin: Alignment.topCenter, // Titik awal gradien
-                end: Alignment.bottomCenter, // Titik akhir gradien
               ),
             ),
-            child: Column(
-              children: [
-                Image.network(
-                    "https://news.ciptamedika.com/wp-content/uploads/2019/02/alatkesehatan.png"),
-                Title(),
-                Space(),
-                const SizedBox(
-                  height: 20,
-                ),
-                Description(),
-                const SizedBox(
-                  height: 40,
-                ),
-                const Text(
-                  "Komentar",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                Stack(alignment: Alignment.topCenter, children: [
-                  Positioned(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(50),
-                          color: const Color.fromARGB(255, 255, 255, 255)),
-                      height: 380,
-                      width: 390,
-                      child: FutureBuilder<List<GetKomentar>>(
-                        future: GetKomentar.getKomentar(
-                            widget.id), // Panggilan untuk mendapatkan komentar
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            return const Center(
-                                child: Text('Harap Buka Ulang Aplikasi'));
-                          } else if (!snapshot.hasData ||
-                              snapshot.data!.isEmpty) {
-                            return const Center(
-                                child: Text('Belum Ada Komentar'));
-                          } else {
-                            List<GetKomentar> dataKomentar =
-                                snapshot.data!; // Ambil data komentar
-                            return ListView.separated(
-                              shrinkWrap: true,
-                              separatorBuilder: (context, index) =>
-                                  const Divider(height: 5),
-                              itemCount: dataKomentar.length,
-                              itemBuilder: (context, index) {
-                                var data = dataKomentar[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 30, top: 20, left: 0, right: 20),
-                                  child: ListTile(
-                                    title: Text(
-                                      "${data.email}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 19),
-                                    ),
-                                    subtitle: Text(
-                                      "${data.komentar}",
-                                      textAlign: TextAlign.justify,
-                                    ),
-                                    leading: const Icon(Icons.person_2),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Text(
+      dataRespon.title,
+      textAlign: TextAlign.center,
+      style: GoogleFonts.poppins(
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildInfoColumn(Icons.date_range, dataRespon.date, 'Tanggal'),
+        _buildInfoColumn(Icons.book, dataRespon.category, 'Kategori'),
+        _buildInfoColumn(Icons.accessibility_new, dataRespon.jumlah, 'Jumlah'),
+      ],
+    );
+  }
+
+  Widget _buildInfoColumn(IconData icon, String text, String label) {
+    return Column(
+      children: [
+        Icon(icon, size: 24),
+        const SizedBox(height: 4),
+        Text(
+          text,
+          style: GoogleFonts.poppins(fontSize: 12),
+        ),
+        Text(
+          label,
+          style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDescription() {
+    return Text(
+      dataRespon.content,
+      textAlign: TextAlign.center,
+      style: GoogleFonts.poppins(textStyle: const TextStyle(fontSize: 14)),
+    );
+  }
+
+  Widget _buildCommentSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'Komentar',
+          textAlign: TextAlign.center,
+          style: GoogleFonts.poppins(
+              textStyle:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Card(
+            color: Colors.white,
+            elevation: 4,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: const Icon(Icons.email),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
-                  Comment(),
-                ]),
-                DownloadInformation()
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container DownloadInformation() {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 0, top: 40),
-            child: Text(
-              "Informasi Lebih Lanjut",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: Colors.black)),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Informasi Email"),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextField(
-                            controller: simpanEmailDownload,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(60),
-                              ),
-                              prefixIcon: const Icon(Icons.email_outlined),
-                              labelText: "Masukkan Email",
-                              hintText: "..@gmail.com",
-                              hintStyle: TextStyle(
-                                  color: Colors.grey.withOpacity(0.5)),
-                            ),
-                          )
-                        ],
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _commentController,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      labelText: 'Komentar',
+                      prefixIcon: const Icon(Icons.comment),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text("Close"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: const Text("DOWNLOAD"),
-                          onPressed: () async {
-                            if (simpanEmailDownload.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  content: Text("Email Tidak Boleh Kosong"),
-                                ),
-                              );
-                            } else {
-                              await PermissionFile.postDownload(
-                                  widget.id, simpanEmailDownload.text);
-                              launchUrl(Uri.parse(dataFile.pdf));
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: const Text(
-                "Download PDF",
-                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _submitComment,
+                    child: const Text('Kirim Komentar'),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(
-              width: 20,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Viewpdfpage(
-                                data: dataFile.pdf,
-                              )));
-                },
-                child: const Text(
-                  "Lihat Pdf",
-                  style: TextStyle(color: Colors.black),
-                ))
-          ]),
-          const SizedBox(
-            height: 20,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 16),
+        _buildCommentList(),
+      ],
     );
   }
 
-  Container Comment() {
+  Widget _buildCommentList() {
+    return dataKomentar.isEmpty
+        ? const Center(child: Text('Belum Ada Komentar'))
+        : ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: dataKomentar.length,
+            itemBuilder: (context, index) {
+              var comment = dataKomentar[index];
+              return ListTile(
+                leading: const CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  comment.email ?? 'Anonim',
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                subtitle: Text(comment.komentar ?? ''),
+              );
+            },
+          );
+  }
+
+  Widget _buildDownloadSection() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(6, 350, 6, 0),
-      padding: const EdgeInsets.fromLTRB(15, 35, 15, 15),
       decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-          borderRadius: BorderRadius.circular(50),
-          color: const Color.fromARGB(255, 255, 255, 255)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 21, bottom: 5),
-            child: Text(
-              "Tinggalkan Komentar",
-              textAlign: TextAlign.end,
-              style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: Colors.black)),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-            child: TextField(
-              controller: simpanEmail,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.black),
-                    borderRadius: BorderRadius.circular(60),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(60)),
-                  prefixIcon: const Icon(
-                    Icons.email_outlined,
-                    color: Colors.black,
-                  ),
-                  labelText: "Masukkan Email",
-                  labelStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
-                  hintText: "..@gmail.com",
-                  hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5))),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-            child: TextField(
-              controller: simpanKomentar,
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black),
-                  borderRadius: BorderRadius.circular(60),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.black),
-                    borderRadius: BorderRadius.circular(60)),
-                prefixIcon: const Icon(
-                  Icons.pending,
-                  color: Colors.black,
-                ),
-                labelText: "Masukkan Komentar",
-                labelStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
-              ),
-              maxLines: null,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 23, 15, 15),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (simpanEmail.text.isEmpty || simpanKomentar.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text("Email dan Komentar harus diisi")),
-                    );
-                  } else {
-                    await PostSigita.postSigita(
-                        dataRespon.id, simpanEmail.text, simpanKomentar.text);
-                    FocusScope.of(context).unfocus();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text("Komentar Berhasil Dimasukkan")),
-                    );
-                  }
-                },
-                child: const Text(
-                  "Simpan Komentar",
-                  style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container Description() {
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      // height: 180,
-      // color: Colors.blue,
-      child: Text(
-        dataRespon.content,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.poppins(textStyle: const TextStyle(fontSize: 18)),
-      ),
-    );
-  }
-
-  SizedBox Space() {
-    return SizedBox(
-      height: 100,
-      // color: Colors.red,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 15),
-            width: 130,
-            // color: Colors.blue,
-            child: Column(
-              children: [
-                const Icon(
-                  Icons.date_range,
-                  size: 35,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  dataRespon.date,
-                  style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(fontSize: 12)),
-                )
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 20),
-            width: 130,
-            // color: Colors.green,
-            child: Column(
-              children: [
-                const Icon(
-                  Icons.book,
-                  size: 30,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  dataRespon.category,
-                  style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(fontSize: 15)),
-                )
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 20),
-            width: 100,
-            // color: Colors.yellow,
-            child: Column(
-              children: [
-                const Icon(
-                  Icons.accessibility_new,
-                  size: 30,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  "Jumlah ${dataRespon.jumlah}",
-                  style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(fontSize: 15)),
-                )
-              ],
-            ),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: Offset(0, 4),
           ),
         ],
       ),
-    );
-  }
-
-  Center Title() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: Text(dataRespon.title,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 22,
-            ))),
+      child: Card(
+        color: Colors.white,
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(
+                'Informasi Lebih Lanjut',
+                style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500)),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade50,
+                        foregroundColor: Colors.blue),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Download PDF'),
+                          content: TextField(
+                            controller: _downloadEmailController,
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Batal'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                _downloadPDF();
+                              },
+                              child: const Text('Download'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: const Text('Download PDF'),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade50,
+                        foregroundColor: Colors.blue),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Viewpdfpage(
+                            data: dataFile.pdf,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text('Lihat PDF'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

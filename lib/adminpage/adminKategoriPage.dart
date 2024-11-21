@@ -186,11 +186,11 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
                       "Tabel Kategori",
                       textAlign: TextAlign.center,
                     ),
-                    columns: [
-                      const DataColumn(label: Text("No")),
-                      const DataColumn(label: Text("Kategori")),
-                      const DataColumn(label: Text("Jumlah Postingan")),
-                      const DataColumn(label: Text("Aksi"))
+                    columns: const [
+                      DataColumn(label: Text("No")),
+                      DataColumn(label: Text("Kategori")),
+                      DataColumn(label: Text("Jumlah Postingan")),
+                      DataColumn(label: Text("Aksi"))
                     ],
                     source: MyDataSource(
                         getKategori: getKategoriList, context: context),
