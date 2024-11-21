@@ -25,29 +25,18 @@ class _OpeningSplashScreenState extends State<OpeningSplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.white,
-            Color.fromRGBO(202, 248, 253, 1),
-          ],
-          begin: Alignment.topLeft, // Titik awal gradien
-          end: Alignment.bottomRight, // Titik akhir gradien
-        ),
-      ),
-      child: Center(
-          child: AnimatedTextKit(animatedTexts: [
-        TypewriterAnimatedText(
-          'Welcome to Sigita',
-          textStyle: const TextStyle(
-            fontSize: 30,
-            color: Color.fromARGB(255, 7, 7, 7),
-            fontWeight: FontWeight.bold,
+        backgroundColor: Colors.white,
+        body: Center(
+            child: AnimatedTextKit(animatedTexts: [
+          TypewriterAnimatedText(
+            'Welcome to Sigita',
+            textStyle: const TextStyle(
+              fontSize: 30,
+              color: Color.fromARGB(255, 7, 7, 7),
+              fontWeight: FontWeight.bold,
+            ),
+            speed: const Duration(milliseconds: 200),
           ),
-          speed: const Duration(milliseconds: 200),
-        ),
-      ])),
-    ));
+        ])));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sigita_final_project/drawerNav/drawerNavigasi.dart';
 import 'package:sigita_final_project/navigasi/navigasiBar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -9,130 +10,172 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const Navigasibar(),
-        drawer: const Drawernavigasi(),
-        body: SingleChildScrollView(
-          child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.white,
-                    Color.fromRGBO(202, 248, 253, 1),
-                  ],
-                  begin: Alignment.topCenter, // Titik awal gradien
-                  end: Alignment.bottomCenter, // Titik akhir gradien
-                ),
+      appBar: const Navigasibar(),
+      drawer: const Drawernavigasi(),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.white,
+              Color.fromRGBO(202, 248, 253, 1),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          children: [
+            // Welcome Header
+            Text(
+              "Selamat Datang di SIGITA",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(10, 40, 10, 30),
-                      child: Text(
-                        "Selamat Datang di SIGITA",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    buildSection(
-                      icon: Icons.search,
-                      title: 'Mengapa Memilih SIGITA',
-                      description:
-                          "SIGITA menawarkan berbagai modul pembelajaran yang mencakup semua aspek keperawatan, modul dirancang untuk interaktif dan mudah dipahami dan simulasi kasus nyata untuk membantu Andamenguasai materi dengan lebih baik. Akses Fleksibel memungkinkan Anda untuk mengatur waktu belajar sesuai dengan kebutuhan Anda.",
-                    ),
-                    buildSection(
-                      icon: Icons.book,
-                      title: 'Modul Pembelajaran Unggulan',
-                      description:
-                          "Dasar-dasar Keperawatan: Memahami anatomi manusia, terminologi medis, dan teknik dasar keperawatan \nKeperawatan Klinis: Teknik-teknik perawatan klinis, manajemen pasien, dan penanganan situasi darurat. Keperawatan Spesialis: Modul khusus untuk keperawatan anak, geriatri, komunitas, dan lainnya.",
-                    ),
-                    buildSection(
-                      icon: Icons.support_agent,
-                      title: 'Dukungan Ahli',
-                      description:
-                          "Dapatkan bimbingan dari para ahli dan praktisi keperawatan yang berpengalaman. Tim SIGITA siap membantu menjawab pertanyaan dan memberikan tips praktis tingkatkan pengetahuan dan keterampilan Anda untuk menjadi perawat yang kompeten dan percaya diri..",
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    const Text(
-                      "Lihat Informasi Lebih Lanjut",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 40),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            launchUrl(Uri.parse(
-                                "https://www.youtube.com/@rsjsambanglihum4612"));
-                          },
-                          child: const Text(
-                            "Cek Youtube Kami",
-                            style: TextStyle(color: Colors.black),
-                          )),
-                    ),
-                  ])),
-        ));
-  }
+            ),
 
-  Widget buildSection(
-      {required IconData icon,
-      required String title,
-      required String description}) {
-    return SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  const CircleAvatar(backgroundColor: Color.fromARGB(255, 162, 213, 255), radius: 27),
-                  const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 21),
-                  CircleAvatar(
-                      backgroundColor: const Color.fromARGB(255, 162, 213, 255),
-                      radius: 18,
-                      child: Icon(icon, size: 25, color: Colors.black)),
-                ],
+            const SizedBox(height: 20),
+
+            // Sections
+            _buildInfoCard(
+              icon: Icons.search,
+              title: 'Mengapa Memilih SIGITA',
+              description:
+                  "SIGITA menawarkan berbagai modul pembelajaran yang mencakup semua aspek keperawatan. Modul dirancang interaktif, mudah dipahami, dengan simulasi kasus nyata untuk membantu Anda menguasai materi dengan lebih baik.",
+            ),
+
+            _buildInfoCard(
+              icon: Icons.book,
+              title: 'Modul Pembelajaran Unggulan',
+              description:
+                  "• Dasar-dasar Keperawatan: Anatomi, terminologi medis, teknik dasar\n• Keperawatan Klinis: Teknik perawatan, manajemen pasien\n• Keperawatan Spesialis: Modul khusus anak, geriatri, komunitas",
+            ),
+
+            _buildInfoCard(
+              icon: Icons.support_agent,
+              title: 'Dukungan Ahli',
+              description:
+                  "Dapatkan bimbingan dari ahli dan praktisi keperawatan berpengalaman. Tim SIGITA siap membantu menjawab pertanyaan dan memberikan tips praktis untuk meningkatkan kompetensi Anda.",
+            ),
+
+            const SizedBox(height: 20),
+
+            // Additional Information Section
+            Text(
+              "Lihat Informasi Lebih Lanjut",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22)),
-                      const SizedBox(height: 13),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(description, style: const TextStyle(color: Colors.black),textAlign: TextAlign.justify,),
-                      ),
-                    ],
+            ),
+
+            const SizedBox(height: 15),
+
+            // YouTube Button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  launchUrl(Uri.parse(
+                      "https://www.youtube.com/@rsjsambanglihum4612"));
+                },
+                icon:
+                    const Icon(Icons.play_circle_outline, color: Colors.white),
+                label: Text(
+                  "Cek Youtube Kami",
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              )
-            ],
-          )),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard({
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Circular Icon
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue[50],
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Icon(
+                icon,
+                color: Colors.blue,
+                size: 28,
+              ),
+            ),
+
+            const SizedBox(width: 16),
+
+            // Content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: GoogleFonts.poppins(
+                      color: Colors.black87,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
