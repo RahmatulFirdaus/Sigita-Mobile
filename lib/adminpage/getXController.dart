@@ -13,27 +13,40 @@ class Getxcontrollerpage extends StatefulWidget {
 
 class _GetxcontrollerpageState extends State<Getxcontrollerpage> {
   final NavigationController _navController = Get.put(NavigationController());
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-        body: _navController.screen[_navController.selectedIndex.value],
-
-        bottomNavigationBar: NavigationBar(
-          backgroundColor: Colors.white,
-          selectedIndex: _navController.selectedIndex.value,
-          onDestinationSelected: (index) {
-            _navController.updateIndex(index);
-          },
-          destinations: [
-            const NavigationDestination(icon: Icon(Icons.home_rounded), label: "Home"),
-            const NavigationDestination(icon: Icon(Icons.poll_sharp), label: "Postingan"),
-            const NavigationDestination(icon: Icon(Icons.polyline), label: "Kategori"),
-          ],
-        )));
+          body: _navController.screen[_navController.selectedIndex.value],
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            selectedItemColor: Colors.blueAccent,
+            unselectedItemColor: Colors.grey,
+            showUnselectedLabels: false,
+            showSelectedLabels: true,
+            currentIndex: _navController.selectedIndex.value,
+            onTap: (index) {
+              _navController.updateIndex(index);
+            },
+            items: [
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.home_rounded),
+                label: "Home",
+              ),
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.poll_sharp),
+                label: "Postingan",
+              ),
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.polyline),
+                label: "Kategori",
+              ),
+            ],
+          ),
+        ));
   }
 }
 
-//merupakan sebuah class yang menyimpan dan mengelola indeks halaman dengan getx
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 

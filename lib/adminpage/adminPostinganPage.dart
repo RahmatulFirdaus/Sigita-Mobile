@@ -222,28 +222,12 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
                     ],
                   ),
                 ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: -50,
-                      top: -50,
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Icon(
-                        Icons.article_rounded,
-                        size: 80,
-                        color: Colors.white.withOpacity(0.3),
-                      ),
-                    ),
-                  ],
+                child: Center(
+                  child: Icon(
+                    Icons.article_rounded,
+                    size: 80,
+                    color: Colors.white.withOpacity(0.3),
+                  ),
                 ),
               ),
             ),
