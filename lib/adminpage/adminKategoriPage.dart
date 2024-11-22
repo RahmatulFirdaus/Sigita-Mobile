@@ -198,7 +198,10 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.add_circle_outline),
+                icon: const Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.white,
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -208,7 +211,10 @@ class _AdminkategoripageState extends State<Adminkategoripage> {
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.refresh),
+                icon: const Icon(
+                  Icons.refresh,
+                  color: Colors.white,
+                ),
                 onPressed: fetchData,
               ),
             ],

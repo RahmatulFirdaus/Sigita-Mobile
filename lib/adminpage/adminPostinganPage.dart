@@ -233,7 +233,10 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.add_circle_outline),
+                icon: const Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.white,
+                ),
                 tooltip: 'Tambah Postingan',
                 onPressed: () {
                   Navigator.push(
@@ -244,7 +247,7 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh, color: Colors.white),
                 tooltip: 'Refresh Data',
                 onPressed: fetchData,
               ),
