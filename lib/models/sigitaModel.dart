@@ -17,7 +17,7 @@ class GetSigita {
 
   // Mengambil data tanpa validasi
   static Future<List<GetSigita>> connApi() async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getPostingan");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/getPostingan");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -36,7 +36,7 @@ class GetSigita {
   }
 
   static Future<GetSigita> connApiDetail(String id) async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getPostinganDetail/$id");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/getPostinganDetail/$id");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var user = jsonData["data"][0];
@@ -65,7 +65,7 @@ class PostSigita {
 
   static Future<PostSigita> postSigita(
       String idPostingan, String email, String komentar) async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/simpanKomentar");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/simpanKomentar");
     var hasilResponse = await http.post(
       url,
       body: {
@@ -89,7 +89,7 @@ class GetFile {
   GetFile({required this.pdf});
 
   static Future<GetFile> getFile(String id) async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getDownloadFile/$id");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/getDownloadFile/$id");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var user = jsonData["data"];
@@ -107,7 +107,7 @@ class PermissionFile {
 
   static Future<PermissionFile> postDownload(
       String idPostingan, String email) async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/downloadModul");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/downloadModul");
     var hasilResponse = await http.post(
       url,
       body: {
@@ -129,7 +129,7 @@ class GetKategori {
   GetKategori({required this.kategori, required this.id});
 
   static Future<List<GetKategori>> getKategori() async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getKategori");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/getKategori");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -153,7 +153,7 @@ class GetKomentar {
   });
 
   static Future<List<GetKomentar>> getKomentar(String id) async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getKomentar/$id");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/getKomentar/$id");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var dataList = jsonData["data"] as List;
@@ -174,7 +174,7 @@ class GetPesan {
   GetPesan({required this.pesan});
 
   static Future<GetPesan> getPesan(String id) async {
-    Uri url = Uri.parse("http://10.0.10.50:3000/api/getKomentar/$id");
+    Uri url = Uri.parse("http://192.168.1.3:3000/api/getKomentar/$id");
     var hasilResponse = await http.get(url);
     var jsonData = jsonDecode(hasilResponse.body);
     var user = jsonData["pesan"];

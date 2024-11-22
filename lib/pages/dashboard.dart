@@ -128,49 +128,47 @@ class DashboardPage extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Circular Icon
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue[50],
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Icon(
-                icon,
-                color: Colors.blue,
-                size: 28,
-              ),
-            ),
-
-            const SizedBox(width: 16),
-
-            // Content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width: 45,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue[50],
+                  ),
+                  child: Icon(
+                    icon,
+                    color: Colors.blue,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
                     title,
                     style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                     ),
+                    overflow: TextOverflow.clip,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    description,
-                    style: GoogleFonts.poppins(
-                      color: Colors.black87,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
-                ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Text(
+              description,
+              style: GoogleFonts.poppins(
+                color: Colors.black87,
+                fontSize: 14,
               ),
+              textAlign: TextAlign.justify,
             ),
           ],
         ),

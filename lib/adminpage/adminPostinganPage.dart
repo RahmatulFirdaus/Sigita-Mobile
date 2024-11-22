@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,6 +17,8 @@ class Adminpostinganpage extends StatefulWidget {
 
 class _AdminpostinganpageState extends State<Adminpostinganpage> {
   List<GetPostinganAdmin> getPostingan = [];
+  bool isLoading = true;
+  String searchQuery = '';
 
   @override
   void initState() {
@@ -26,11 +27,26 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
   }
 
   Future<void> fetchData() async {
-    final getPosting = await GetPostinganAdmin.getPostinganAdmin();
-    setState(() {
-      getPostingan = getPosting;
-    });
+    setState(() => isLoading = true);
+    try {
+      final getPosting = await GetPostinganAdmin.getPostinganAdmin();
+      setState(() {
+        getPostingan = getPosting;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
   }
+
+  List<GetPostinganAdmin> get filteredPostingan => getPostingan
+      .where((post) =>
+          post.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
+          post.category.toLowerCase().contains(searchQuery.toLowerCase()))
+      .toList();
 
   Future<void> generatePDF() async {
     final pdf = pw.Document();
@@ -181,62 +197,208 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(""),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddPostingan()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: PaginatedDataTable(
-                  header: const Text(
-                    "Tabel Postingan",
-                    textAlign: TextAlign.center,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200.0,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text(
+                'Postingan Management',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.black,
+                      Colors.blue[900]!,
+                    ],
                   ),
-                  columns: const [
-                    DataColumn(label: Text("No")),
-                    DataColumn(label: Text("Judul")),
-                    DataColumn(label: Text("Kategori")),
-                    DataColumn(label: Text("File")),
-                    DataColumn(label: Text("Deskripsi")),
-                    DataColumn(label: Text("Jumlah Download")),
-                    DataColumn(label: Text("Jumlah Komentar")),
-                    DataColumn(label: Text("Aksi")),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      right: -50,
+                      top: -50,
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Icon(
+                        Icons.article_rounded,
+                        size: 80,
+                        color: Colors.white.withOpacity(0.3),
+                      ),
+                    ),
                   ],
-                  source: MyDataSource(
-                      getPostingan: getPostingan,
-                      context: context), // Pass context here
-                  rowsPerPage: 10,
                 ),
               ),
             ),
-          ],
-        ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add_circle_outline),
+                tooltip: 'Tambah Postingan',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddPostingan()),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                tooltip: 'Refresh Data',
+                onPressed: fetchData,
+              ),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: Card(
+              margin: const EdgeInsets.all(16.0),
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) =>
+                                setState(() => searchQuery = value),
+                            decoration: InputDecoration(
+                              hintText: 'Cari postingan...',
+                              prefixIcon: const Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey[100],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          '${filteredPostingan.length} postingan',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (isLoading)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  else
+                    SizedBox(
+                      width: double.infinity,
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          cardTheme: CardTheme(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
+                        child: PaginatedDataTable(
+                          header: null,
+                          columns: const [
+                            DataColumn(
+                              label: Text(
+                                "No",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Judul",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Kategori",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "File",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Deskripsi",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Downloads",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Komentar",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Aksi",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                          source: MyDataSource(
+                            getPostingan: filteredPostingan,
+                            context: context,
+                            onRefresh: fetchData,
+                          ),
+                          rowsPerPage: 10,
+                          showFirstLastButtons: true,
+                          arrowHeadColor: Colors.black,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
-        child: const Icon(Icons.picture_as_pdf, color: Colors.white),
-        onPressed: () {
-          generatePDF();
-        },
+        onPressed: generatePDF,
+        child: Icon(Icons.picture_as_pdf, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
@@ -246,8 +408,13 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
 class MyDataSource extends DataTableSource {
   final List<GetPostinganAdmin> getPostingan;
   final BuildContext context;
+  final Function onRefresh;
 
-  MyDataSource({required this.getPostingan, required this.context});
+  MyDataSource({
+    required this.getPostingan,
+    required this.context,
+    required this.onRefresh,
+  });
 
   @override
   DataRow? getRow(int index) {
@@ -255,74 +422,132 @@ class MyDataSource extends DataTableSource {
 
     final postingan = getPostingan[index];
 
-    return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text(postingan.title)),
-      DataCell(Text(postingan.category)),
-      DataCell(Text(postingan.file)),
-      DataCell(Text(postingan.content)),
-      DataCell(Text(postingan.jumlahDownload
-          .toString())), // Assuming this is a numeric value
-      DataCell(Text(postingan.jumlahKomentar
-          .toString())), // Assuming this is a numeric value
-      DataCell(
-        Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdatePostingan(id: postingan.id),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.edit),
+    return DataRow(
+      cells: [
+        DataCell(
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
             ),
-            IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    content: const Text(
-                        "Apakah Anda yakin ingin menghapus postingan ini?"),
-                    actions: [
-                      TextButton(
-                        child: const Text("Batal"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      TextButton(
-                        child: const Text("Hapus"),
-                        onPressed: () async {
-                          Navigator.pop(context); // Menutup dialog
-                          try {
-                            await DeletePostinganAdmin.deletePostinganAdmin(
-                                postingan.id); // Menambahkan await
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Data Berhasil Dihapus")),
-                            );
-                            // Refresh data setelah menghapus
-                            await (context
-                                .findAncestorStateOfType<
-                                    _AdminpostinganpageState>()
-                                ?.fetchData());
-                          } catch (e) {
-                            // Menangani kesalahan saat menghapus data
-                            print(e);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(Icons.delete),
+            child: Text(
+              (index + 1).toString(),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-          ],
+          ),
         ),
+        DataCell(Text(postingan.title)),
+        DataCell(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.blue[50],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              postingan.category,
+              style: TextStyle(color: Colors.blue[700]),
+            ),
+          ),
+        ),
+        DataCell(Text(postingan.file)),
+        DataCell(Text(postingan.content)),
+        DataCell(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.green[50],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              postingan.jumlahDownload.toString(),
+              style: TextStyle(color: Colors.green[700]),
+            ),
+          ),
+        ),
+        DataCell(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.orange[50],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              postingan.jumlahKomentar.toString(),
+              style: TextStyle(color: Colors.orange[700]),
+            ),
+          ),
+        ),
+        DataCell(
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit, color: Colors.blue[700]),
+                tooltip: 'Edit Postingan',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UpdatePostingan(id: postingan.id),
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.red[700]),
+                tooltip: 'Hapus Postingan',
+                onPressed: () => _showDeleteDialog(context, postingan),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, GetPostinganAdmin postingan) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Konfirmasi Hapus'),
+        content: const Text('Apakah Anda yakin ingin menghapus postingan ini?'),
+        actions: [
+          TextButton(
+            child: const Text('Batal'),
+            onPressed: () => Navigator.pop(context),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Hapus'),
+            onPressed: () async {
+              try {
+                await DeletePostinganAdmin.deletePostinganAdmin(postingan.id);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Postingan berhasil dihapus'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                await onRefresh();
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: ${e.toString()}'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
-    ]);
+    );
   }
 
   @override

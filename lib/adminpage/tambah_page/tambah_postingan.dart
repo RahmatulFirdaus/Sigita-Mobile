@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
-import 'package:sigita_final_project/models/adminModel.dart';
 import 'package:sigita_final_project/models/sigitaModel.dart';
 
 class AddPostingan extends StatefulWidget {
@@ -25,7 +24,6 @@ class _AddPostinganState extends State<AddPostingan> {
   List<GetKategori> dataKategori = [];
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
-
   File? _file;
 
   @override
@@ -104,7 +102,7 @@ class _AddPostinganState extends State<AddPostingan> {
   }) async {
     if (_file == null) return;
 
-    var uri = Uri.parse("http://10.0.10.58:3000/api/uploadFileAdmin");
+    var uri = Uri.parse("http://192.168.1.3:3000/api/uploadFileAdmin");
     var request = http.MultipartRequest('POST', uri);
 
     // Tambahkan file ke dalam request
@@ -120,7 +118,7 @@ class _AddPostinganState extends State<AddPostingan> {
     request.fields['judul'] = judul;
     request.fields['deskripsi'] = deskripsi;
     request.fields['tanggal'] = tanggal;
-    
+
     var response = await request.send();
 
     if (response.statusCode == 200) {
@@ -134,180 +132,279 @@ class _AddPostinganState extends State<AddPostingan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Data Postingan'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Tambah Postingan Baru',
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: const Text(
-                  "Judul",
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextField(
-                  controller: judulController,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: const Text(
-                  "Kategori",
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              Container(
-                child: DropdownButton<String>(
-                  value: idKategori,
-                  hint: const Text("Pilih Kategori"),
-                  items: dataKategori.map((GetKategori getKategori) {
-                    return DropdownMenuItem<String>(
-                      value: getKategori.id,
-                      child: Text(getKategori.kategori),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      idKategori = value;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: const Text(
-                  "File",
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextField(
-                  controller: fileController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    hintText: _file != null ? ' ${basename(_file!.path)}' : '',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              ElevatedButton(onPressed: _pickFile, child: Text('Pilih File')),
-              const SizedBox(height: 15),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: const Text(
-                  "Deskripsi",
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextField(
-                  controller: deskripsiController,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: const Text(
-                  "Tanggal",
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextField(
-                  controller: tanggalController,
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                    border: InputBorder.none,
-                  ),
-                  onTap: () => _selectDateTime(context),
-                ),
-              ),
-              const SizedBox(height: 35),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          foregroundColor: Colors.black),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Cancel"),
+      body: Container(
+        color: Colors.grey[50],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildInputSection(
+                  title: "Judul Postingan",
+                  child: TextFormField(
+                    controller: judulController,
+                    decoration: _buildInputDecoration(
+                      hintText: "Masukkan judul postingan",
+                      prefixIcon: Icons.title,
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 131, 255, 135),
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                ),
+                _buildInputSection(
+                  title: "Kategori",
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: idKategori,
+                        hint: const Text("Pilih kategori postingan"),
+                        items: dataKategori.map((GetKategori getKategori) {
+                          return DropdownMenuItem<String>(
+                            value: getKategori.id,
+                            child: Text(getKategori.kategori),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            idKategori = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                _buildInputSection(
+                  title: "Upload File",
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: fileController,
+                        readOnly: true,
+                        decoration: _buildInputDecoration(
+                          hintText: _file != null
+                              ? basename(_file!.path)
+                              : "Pilih file untuk diunggah",
+                          prefixIcon: Icons.attachment,
                         ),
                       ),
-                      onPressed: () async {
-                        try{
-                          uploadFileWithFormData(
+                      const SizedBox(height: 12),
+                      ElevatedButton.icon(
+                        onPressed: _pickFile,
+                        icon: const Icon(Icons.upload_file),
+                        label: const Text("Pilih File"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _buildInputSection(
+                  title: "Deskripsi",
+                  child: TextFormField(
+                    controller: deskripsiController,
+                    maxLines: 4,
+                    decoration: _buildInputDecoration(
+                      hintText: "Tuliskan deskripsi postingan",
+                      prefixIcon: Icons.description,
+                    ),
+                  ),
+                ),
+                _buildInputSection(
+                  title: "Tanggal",
+                  child: TextFormField(
+                    controller: tanggalController,
+                    readOnly: true,
+                    decoration: _buildInputDecoration(
+                      hintText: "Pilih tanggal postingan",
+                      prefixIcon: Icons.calendar_today,
+                    ),
+                    onTap: () => _selectDateTime(context),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          "Batal",
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            await uploadFileWithFormData(
                               id_kategori: idKategori!,
                               judul: judulController.text,
                               deskripsi: deskripsiController.text,
-                              tanggal: tanggalController.text);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Data Berhasil Tersimpan")),
-                          );
-                          Navigator.pop(context);
-                        } catch(e){ 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Data Gagal Tersimpan")),
-                          );
-                        }
-                      },
-                      child: const Text("Simpan"),
+                              tanggal: tanggalController.text,
+                            );
+                            _showSuccessMessage(context);
+                            Navigator.pop(context);
+                          } catch (e) {
+                            _showErrorMessage(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          "Simpan",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInputSection({
+    required String title,
+    required Widget child,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+          child,
+        ],
+      ),
+    );
+  }
+
+  InputDecoration _buildInputDecoration({
+    required String hintText,
+    required IconData prefixIcon,
+  }) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: TextStyle(color: Colors.grey[400]),
+      prefixIcon: Icon(prefixIcon, color: Colors.grey[400]),
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.blue, width: 2),
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 16,
+      ),
+    );
+  }
+
+  void _showSuccessMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Icon(Icons.check_circle, color: Colors.white),
+            SizedBox(width: 8),
+            Text("Data berhasil tersimpan"),
+          ],
+        ),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
+  void _showErrorMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Icon(Icons.error, color: Colors.white),
+            SizedBox(width: 8),
+            Text("Gagal menyimpan data"),
+          ],
+        ),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );

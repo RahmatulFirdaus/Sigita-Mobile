@@ -40,126 +40,101 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.white,
-              Color.fromRGBO(202, 248, 253, 1),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      child: ListView(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("images/rsnew.png"), fit: BoxFit.cover),
+            ),
+            child: null,
           ),
-        ),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              padding: EdgeInsets.zero,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("images/rsj.jpg"), fit: BoxFit.cover),
+          ListTile(
+            leading: const Icon(Icons.dashboard_outlined, color: Colors.black),
+            title: const Text(
+              "Dashboard",
+              style: TextStyle(fontSize: 14),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (context) {
+                  return const DashboardPage();
+                },
+              ));
+            },
+          ),
+          Theme(
+            data: Theme.of(context).copyWith(
+              dividerColor: Colors.transparent,
+            ),
+            child: ExpansionTile(
+              leading: const Icon(
+                Icons.topic_outlined,
+                color: Colors.black,
               ),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(90),
-                    child: Image.network(
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUqiWQ4-b3TjwWaS_4GtAEW8WZ3BVWmC5kNw&s",
-                      width: 130,
-                      height: 130,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, exception, stackTrace) {
-                        return Icon(
-                          Icons.broken_image,
-                          size: 90,
-                          color: const Color.fromARGB(255, 255, 17, 0),
-                        );
-                      },
+              title: const Text("Topik", style: TextStyle(fontSize: 14)),
+              children: dataKategori.map((kategori) {
+                return Container(
+                  // color: Colors.red,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.article_outlined,
+                      color: Colors.black,
                     ),
+                    title: Text(
+                      kategori.kategori,
+                      style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    onTap: () {
+                      _selectedIndex = dataKategori.indexOf(kategori);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  pageList[_selectedIndex]['halaman']));
+                    },
                   ),
-                ],
+                );
+              }).toList(),
+            ),
+          ),
+          ListTile(
+            leading:
+                const Icon(Icons.help_outline_outlined, color: Colors.black),
+            title: Text(
+              "FAQ",
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(fontSize: 14),
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text(
-                "Dashboard",
-                style: TextStyle(fontSize: 14),
-              ),
-              onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) {
-                    return const DashboardPage();
-                  },
-                ));
-              },
-            ),
-            Theme(
-              data: Theme.of(context).copyWith(
-                dividerColor: Colors.transparent,
-              ),
-              child: ExpansionTile(
-                leading: const Icon(Icons.pageview),
-                title: const Text("Topik", style: TextStyle(fontSize: 14)),
-                children: dataKategori.map((kategori) {
-                  return Container(
-                    // color: Colors.red,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.find_in_page_rounded,
-                        color: Colors.blue.withOpacity(0.5),
-                      ),
-                      title: Text(
-                        kategori.kategori,
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                      onTap: () {
-                        _selectedIndex = dataKategori.indexOf(kategori);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    pageList[_selectedIndex]['halaman']));
-                      },
-                    ),
-                  );
-                }).toList(),
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Faqpage()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.admin_panel_settings_outlined,
+                color: Colors.black),
+            title: Text(
+              "Admin Section",
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(fontSize: 14),
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.question_answer),
-              title: Text(
-                "FAQ",
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 14),
-                ),
-              ),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Faqpage()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.admin_panel_settings),
-              title: Text(
-                "Admin Section",
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 14),
-                ),
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Loginadminpage()));
-              },
-            ),
-          ],
-        ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Loginadminpage()));
+            },
+          ),
+        ],
       ),
     );
   }

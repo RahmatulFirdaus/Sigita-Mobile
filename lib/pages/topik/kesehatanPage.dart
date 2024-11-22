@@ -4,6 +4,7 @@ import 'package:sigita_final_project/drawerNav/drawerNavigasi.dart';
 import 'package:sigita_final_project/models/sigitaModel.dart';
 import 'package:sigita_final_project/pages/secondPageKesehatan.dart';
 import 'package:sigita_final_project/navigasi/navigasiBar.dart';
+import 'package:intl/intl.dart';
 
 class Kesehatanpage extends StatefulWidget {
   const Kesehatanpage({super.key});
@@ -21,7 +22,6 @@ class _KesehatanpageState extends State<Kesehatanpage> {
   @override
   void initState() {
     super.initState();
-    // Fetch data on initialization
     GetSigita.connApi().then((value) {
       setState(() {
         dataRespon = value;
@@ -36,20 +36,20 @@ class _KesehatanpageState extends State<Kesehatanpage> {
   }
 
   void filterSearchResults(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        filteredDataRespon = dataRespon;
-      });
-    } else {
-      setState(() {
-        filteredDataRespon = dataRespon
-            .where((item) =>
-                item.title.toLowerCase().contains(query.toLowerCase()) ||
-                item.content.toLowerCase().contains(query.toLowerCase()) ||
-                item.category.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      });
-    }
+    setState(() {
+      filteredDataRespon = query.isEmpty
+          ? dataRespon
+          : dataRespon
+              .where((item) =>
+                  item.title.toLowerCase().contains(query.toLowerCase()) ||
+                  item.content.toLowerCase().contains(query.toLowerCase()) ||
+                  item.category.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+    });
+  }
+
+  String formatDate(String date) {
+    return DateFormat('dd MMM yyyy').format(DateTime.parse(date));
   }
 
   @override
@@ -60,53 +60,54 @@ class _KesehatanpageState extends State<Kesehatanpage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Colors.white,
-              Color.fromRGBO(202, 248, 253, 1),
-            ],
+            colors: [Colors.white, Color.fromRGBO(202, 248, 253, 1)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: Column(
           children: [
-            // Search Bar
-            Container(
-              margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               child: TextField(
                 controller: searchController,
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
+                onChanged: filterSearchResults,
                 decoration: InputDecoration(
                   hintText: "Cari Disini",
-                  hintStyle: TextStyle(color: Colors.grey.shade400),
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: const Icon(Icons.filter_list),
+                  hintStyle:
+                      TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                  prefixIcon: const Icon(Icons.search, size: 20),
+                  suffixIcon: const Icon(Icons.filter_list, size: 20),
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                 ),
               ),
             ),
-
-            // Content List
             Expanded(
               child: filteredDataRespon.isNotEmpty
                   ? ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       itemCount: filteredDataRespon.length,
-                      itemBuilder: (context, index) {
-                        var data = filteredDataRespon[index];
-                        return _buildHealthCard(data);
-                      },
+                      itemBuilder: (context, index) =>
+                          _buildHealthCard(filteredDataRespon[index]),
                     )
-                  : const Center(child: CircularProgressIndicator()),
+                  : const Center(
+                      child: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
             ),
           ],
         ),
@@ -115,96 +116,80 @@ class _KesehatanpageState extends State<Kesehatanpage> {
   }
 
   Widget _buildHealthCard(GetSigita data) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return Card(
+      color: Colors.white,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             child: Image.asset(
               "images/redContent.png",
               fit: BoxFit.cover,
-              height: 180,
+              height: 140,
+              width: double.infinity,
             ),
           ),
-
-          // Content
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title
                 Text(
                   data.title ?? "No Title",
                   style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-
-                const SizedBox(height: 8),
-
-                // Description
+                const SizedBox(height: 4),
                 Text(
                   data.content,
                   style: GoogleFonts.poppins(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: Colors.black87,
                   ),
-                  maxLines: 3,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-
-                const SizedBox(height: 12),
-
-                // Details Row
+                const SizedBox(height: 8),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Icon(Icons.category_outlined,
+                        size: 14, color: Colors.grey[600]),
+                    const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        "Kategori: ${data.category}",
+                        data.category,
                         style: GoogleFonts.poppins(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: Colors.grey[600],
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    Icon(Icons.calendar_today_outlined,
+                        size: 14, color: Colors.grey[600]),
+                    const SizedBox(width: 4),
                     Text(
-                      data.date,
+                      formatDate(data.date),
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.grey[600],
                       ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 12),
-
-                // Action Buttons
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton(
+                      child: TextButton(
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -213,27 +198,31 @@ class _KesehatanpageState extends State<Kesehatanpage> {
                             ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
+                        style: TextButton.styleFrom(
                           backgroundColor: Colors.blue[50],
-                          foregroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(vertical: 4),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: Text(
                           "Lihat Detail",
                           style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.blue[700],
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
+                    Icon(Icons.comment_outlined,
+                        size: 14, color: Colors.grey[600]),
+                    const SizedBox(width: 4),
                     Text(
-                      "Komentar: ${data.jumlah}",
+                      "${data.jumlah}",
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.grey[600],
                       ),
                     ),

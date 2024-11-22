@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sigita_final_project/adminpage/getXController.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Loginadminpage extends StatefulWidget {
   const Loginadminpage({super.key});
@@ -10,198 +11,250 @@ class Loginadminpage extends StatefulWidget {
 }
 
 class _LoginadminpageState extends State<Loginadminpage> {
-  var username = "Admin";
-  var password = "Admin123";
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _isObscure = true;
+
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      textColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 255, 17, 0),
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 3,
+      webPosition: "center",
+      webBgColor: "white",
+      toastLength: Toast.LENGTH_LONG,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            // color: Colors.red,
-            height: MediaQuery.of(context).size.height,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 40, horizontal: 20),
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.3),
+                const SizedBox(height: 20),
+                // Back Button
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+
+                // Login Header
+                Row(
+                  children: [
+                    Text(
+                      "Login Admin",
+                      style: GoogleFonts.poppins(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black87,
+                      ),
                     ),
-                    child: IconButton(
+                    const SizedBox(width: 12),
+                    Container(
+                      height: 46,
+                      width: 46,
+                      // padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.security,
+                        color: Colors.red,
+                        size: 32,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+                Text(
+                  "Please sign in to continue",
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+
+                // Username Field
+                _buildInputLabel("Username"),
+                const SizedBox(height: 8),
+                _buildTextField(
+                  controller: usernameController,
+                  hint: "Enter your username",
+                  icon: Icons.person_outline,
+                ),
+
+                const SizedBox(height: 24),
+
+                // Password Field
+                _buildInputLabel("Password"),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: passwordController,
+                  obscureText: _isObscure,
+                  decoration: InputDecoration(
+                    hintText: "Enter your password",
+                    hintStyle: GoogleFonts.poppins(
+                      color: Colors.grey[400],
+                      fontSize: 14,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.lock_outline,
+                      color: Colors.grey[600],
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isObscure ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey[600],
+                      ),
                       onPressed: () {
-                        Navigator.pop(context);
+                        setState(() {
+                          _isObscure = !_isObscure;
+                        });
                       },
-                      icon: const Icon(Icons.arrow_back_ios_new),
                     ),
-                  )
-                ]),
-                const SizedBox(
-                  height: 20,
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey[200]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.blue),
+                    ),
+                    contentPadding: const EdgeInsets.all(16),
+                  ),
                 ),
-                Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    child: const Row(
-                      children: [
-                        Text(
-                          "Login Admin",
-                          style: TextStyle(
-                            fontSize: 35,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Icon(
-                          Icons.warning_sharp,
-                          color: Color.fromARGB(255, 255, 0, 0),
-                          size: 40,
-                        )
-                      ],
-                    )),
-                const SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 22),
-                  child: Text("Username",
-                      style: TextStyle(
-                          fontSize: 13, color: Colors.black.withOpacity(0.5))),
-                ),
-                Container(
-                    margin: const EdgeInsets.fromLTRB(22, 0, 23, 0),
-                    child: TextField(
-                      controller: usernameController,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(10),
-                        hintStyle:
-                            TextStyle(color: Colors.black.withOpacity(0.5)),
-                        prefixIcon: const Icon(
-                          Icons.person_outline,
-                        ),
-                      ),
-                    )),
-                const SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 22),
-                  child: Text("Password",
-                      style: TextStyle(
-                          fontSize: 13, color: Colors.black.withOpacity(0.5))),
-                ),
-                Container(
-                    padding: const EdgeInsets.fromLTRB(22, 0, 23, 0),
-                    child: TextFormField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(10),
-                        hintStyle:
-                            TextStyle(color: Colors.black.withOpacity(0.5)),
-                        prefixIcon: const Icon(
-                          Icons.lock_outline,
-                        ),
-                      ),
-                    )),
-                const SizedBox(
-                  height: 45,
-                ),
-                Container(
-                  height: 60,
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.symmetric(horizontal: 22),
+
+                const SizedBox(height: 40),
+
+                // Login Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      //validasi saat username dan password kosong
-                      if (usernameController.text == "" &&
-                          passwordController.text == "") {
-                        Fluttertoast.showToast(
-                            msg: "Please enter your username and password",
-                            textColor: Colors.white,
-                            backgroundColor: const Color.fromARGB(
-                                255, 255, 17, 0), //warna bg android
-                            gravity: ToastGravity.BOTTOM, //posisi pada android
-                            timeInSecForIosWeb: 3, //lama muncul pesan pada web
-                            webPosition:
-                                "center", //posisi pada web + kombinasi gravity
-                            webBgColor: "white", //warna pada web
-                            toastLength: Toast.LENGTH_LONG //lama muncul android
-                            );
-                        //validasi saat username kosong
-                      } else if (usernameController.text == "") {
-                        Fluttertoast.showToast(
-                            msg: "Please enter your username",
-                            textColor: Colors.white,
-                            backgroundColor: const Color.fromARGB(
-                                255, 255, 17, 0), //warna bg android
-                            gravity: ToastGravity.BOTTOM, //posisi pada android
-                            timeInSecForIosWeb: 3, //lama muncul pesan pada web
-                            webPosition:
-                                "center", //posisi pada web + kombinasi gravity
-                            webBgColor: "white", //warna pada web
-                            toastLength: Toast.LENGTH_LONG //lama muncul android
-                            );
-                        //validasi saat password kosong
-                      } else if (passwordController.text == "") {
-                        Fluttertoast.showToast(
-                            msg: "Please enter password",
-                            textColor: Colors.white,
-                            backgroundColor: const Color.fromARGB(
-                                255, 255, 17, 0), //warna bg android
-                            gravity: ToastGravity.BOTTOM, //posisi pada android
-                            timeInSecForIosWeb: 3, //lama muncul pesan pada web
-                            webPosition:
-                                "center", //posisi pada web + kombinasi gravity
-                            webBgColor: "white", //warna pada web
-                            toastLength: Toast.LENGTH_LONG //lama muncul android
-                            );
+                      if (usernameController.text.isEmpty &&
+                          passwordController.text.isEmpty) {
+                        _showToast("Please enter your username and password");
+                      } else if (usernameController.text.isEmpty) {
+                        _showToast("Please enter your username");
+                      } else if (passwordController.text.isEmpty) {
+                        _showToast("Please enter password");
                       } else if (usernameController.text == "admin" &&
                           passwordController.text == "admin123") {
                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const Getxcontrollerpage()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Getxcontrollerpage(),
+                          ),
+                        );
                       } else {
-                        Fluttertoast.showToast(
-                            msg: "Invalid username or password",
-                            textColor: Colors.white,
-                            backgroundColor: const Color.fromARGB(
-                                255, 255, 17, 0), //warna bg android
-                            gravity: ToastGravity.BOTTOM, //posisi pada android
-                            timeInSecForIosWeb: 3, //lama muncul pesan pada web
-                            webPosition:
-                                "center", //posisi pada web + kombinasi gravity
-                            webBgColor: "white", //warna pada web
-                            toastLength: Toast.LENGTH_LONG //lama muncul android
-                            );
+                        _showToast("Invalid username or password");
                       }
                     },
-                    style: ButtonStyle(
-                      shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30))),
-                      backgroundColor: MaterialStatePropertyAll(
-                          const Color.fromARGB(255, 0, 0, 0).withOpacity(0.8)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black87,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
                     ),
-                    child: const Text(
+                    child: Text(
                       "Login",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
+
+                const SizedBox(height: 20),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInputLabel(String label) {
+    return Text(
+      label,
+      style: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Colors.black87,
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+  }) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: GoogleFonts.poppins(
+          color: Colors.grey[400],
+          fontSize: 14,
+        ),
+        prefixIcon: Icon(
+          icon,
+          color: Colors.grey[600],
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[200]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue),
+        ),
+        contentPadding: const EdgeInsets.all(16),
       ),
     );
   }
