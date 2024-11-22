@@ -81,7 +81,7 @@ class _DrawernavigasiState extends State<Drawernavigasi> {
                   // color: Colors.red,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.article_outlined,
                       color: Colors.black,
                     ),

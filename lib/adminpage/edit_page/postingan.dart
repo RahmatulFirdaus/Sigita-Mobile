@@ -5,7 +5,7 @@ import 'package:sigita_final_project/models/sigitaModel.dart';
 
 class UpdatePostingan extends StatefulWidget {
   final String id;
-  UpdatePostingan({super.key, required this.id});
+  const UpdatePostingan({super.key, required this.id});
 
   @override
   State<UpdatePostingan> createState() => _UpdatePostinganState();

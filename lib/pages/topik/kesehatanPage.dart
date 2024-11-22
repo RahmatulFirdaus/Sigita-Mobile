@@ -220,7 +220,7 @@ class _KesehatanpageState extends State<Kesehatanpage> {
                         size: 14, color: Colors.grey[600]),
                     const SizedBox(width: 4),
                     Text(
-                      "${data.jumlah}",
+                      data.jumlah,
                       style: GoogleFonts.poppins(
                         fontSize: 11,
                         color: Colors.grey[600],

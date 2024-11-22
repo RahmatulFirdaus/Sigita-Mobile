@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sigita_final_project/main.dart';
 
 class Navigasibar extends StatelessWidget implements PreferredSizeWidget {
   const Navigasibar({super.key});

@@ -28,16 +28,16 @@ class _GetxcontrollerpageState extends State<Getxcontrollerpage> {
             onTap: (index) {
               _navController.updateIndex(index);
             },
-            items: [
-              const BottomNavigationBarItem(
+            items: const [
+              BottomNavigationBarItem(
                 icon: Icon(Icons.home_rounded),
                 label: "Home",
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.poll_sharp),
                 label: "Postingan",
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.polyline),
                 label: "Kategori",
               ),

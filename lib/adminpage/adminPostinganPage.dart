@@ -385,7 +385,7 @@ class _AdminpostinganpageState extends State<Adminpostinganpage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: generatePDF,
-        child: Icon(Icons.picture_as_pdf, color: Colors.white),
+        child: const Icon(Icons.picture_as_pdf, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );

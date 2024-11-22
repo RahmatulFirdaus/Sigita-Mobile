@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PageProposal extends StatefulWidget {
   final String id;
-  const PageProposal({Key? key, required this.id}) : super(key: key);
+  const PageProposal({super.key, required this.id});
 
   @override
   State<PageProposal> createState() => _PageProposalState();
