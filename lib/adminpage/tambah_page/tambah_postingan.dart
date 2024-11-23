@@ -305,6 +305,7 @@ class _AddPostinganState extends State<AddPostingan> {
                           "Simpan",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
                         ),
                       ),
