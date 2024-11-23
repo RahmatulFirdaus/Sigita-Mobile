@@ -102,7 +102,7 @@ class _AddPostinganState extends State<AddPostingan> {
   }) async {
     if (_file == null) return;
 
-    var uri = Uri.parse("http://192.168.1.3:3000/api/uploadFileAdmin");
+    var uri = Uri.parse("http://10.0.10.61:3000/api/uploadFileAdmin");
     var request = http.MultipartRequest('POST', uri);
 
     // Tambahkan file ke dalam request
